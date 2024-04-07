@@ -1,0 +1,4 @@
+project_id: arun-genai-bb
+region: us-central1
+credentials_json: ./credentials/key.json
+text_gen_model_name: gemini-1.0-pro
