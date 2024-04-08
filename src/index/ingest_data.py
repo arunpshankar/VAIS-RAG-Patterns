@@ -3,15 +3,20 @@ from src.config.setup import config
 import requests
 
 
-def ingest_documents() -> None:
+def ingest_documents(gcs_input_uri: str, data_store_id: str) -> None:
     """
     Sends a POST request to GCP to import documents into a specified data store.
+
+    Parameters:
+        gcs_input_uri (str): URI of the input document location in Google Cloud Storage.
+        data_store_id (str): Identifier of the data store where documents will be imported.
 
     Raises:
         Exception: If the request to the GCP API fails.
     """
     # Configuration and Request Setup
-    url = f"https://discoveryengine.googleapis.com/v1/projects/{config.PROJECT_ID}/locations/global/collections/default_collection/dataStores/{config.DATA_STORE_ID}/branches/0/documents:import"
+    project_id = config.PROJECT_ID
+    url = f"https://discoveryengine.googleapis.com/v1/projects/{project_id}/locations/global/collections/default_collection/dataStores/{data_store_id}/branches/0/documents:import"
 
     headers = {
         "Authorization": f"Bearer {config.ACCESS_TOKEN}",
@@ -20,7 +25,7 @@ def ingest_documents() -> None:
 
     data = {
         "gcsSource": {
-            "inputUris": [config.GCS_INPUT_URI] 
+            "inputUris": [gcs_input_uri] 
         }    
     }
 
@@ -39,4 +44,6 @@ def ingest_documents() -> None:
 
 # Example Usage
 if __name__ == '__main__':
-    ingest_documents()
+    gcs_uri = f'gs://{config.BUCKET}/raw_docs'
+    data_store = 'quaterly-reports'
+    ingest_documents(gcs_uri, data_store)
