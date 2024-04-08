@@ -31,7 +31,7 @@ def create_data_store(data_store_display_name: str, data_store_id: str) -> Dict[
         'industryVertical': 'GENERIC',
         'solutionTypes': ['SOLUTION_TYPE_SEARCH'],
         'contentConfig': 'CONTENT_REQUIRED',
-        'searchTier': 'STANDARD',
+        'searchTier': 'ENTERPRISE',
         'searchAddOns': ['LLM']
     }
 
