@@ -3,6 +3,7 @@ from src.config.setup import config
 from typing import Dict, Any
 import requests
 
+
 def create_data_store(data_store_display_name: str, data_store_id: str) -> Dict[str, Any]:
     """
     Create a data store in GCP Vertex AI Search with a specified display name and ID.
@@ -48,6 +49,7 @@ def create_data_store(data_store_display_name: str, data_store_id: str) -> Dict[
         raise
 
     return response.json()
+
 
 if __name__ == '__main__':
     display_name = 'quarterly-reports'

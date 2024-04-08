@@ -62,6 +62,7 @@ def upload_file_to_gcs(source_file_name: str, destination_blob_name: str):
     except GoogleCloudError as e:
         logger.error(f"Failed to upload {source_file_name} to GCS: {e}")
 
+
 def create_manifest():
     prefix = 'raw_docs/'
 
@@ -90,6 +91,7 @@ def create_manifest():
         upload_file_to_gcs(output_file_path, prefix + 'metadata.json')
     except Exception as e:
         logger.error(f"An error occurred: {e}")
+
 
 if __name__ == '__main__':
     create_manifest()
