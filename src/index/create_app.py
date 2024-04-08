@@ -7,18 +7,19 @@ import requests
 import json
 
 
-def create_doc_search_app() -> Optional[Dict[str, Any]]:
+def create_doc_search_app(data_store_display_name: str, data_store_id: str) -> Optional[Dict[str, Any]]:
     """
     Creates a document search application using the Google Discovery Engine API.
 
-    This function constructs a POST request to the Google Discovery Engine API to create a
-    new search engine instance for a specified document collection.
+    Parameters:
+        data_store_display_name (str): The display name for the data store.
+        data_store_id (str): The ID for the data store.
 
     Returns:
         dict: A dictionary containing the response data from the API if the request is successful.
         None: If the request fails.
     """
-    url = f"https://discoveryengine.googleapis.com/v1alpha/projects/{config.PROJECT_ID}/locations/global/collections/default_collection/engines?engineId={config.DATA_STORE_ID}"
+    url = f"https://discoveryengine.googleapis.com/v1alpha/projects/{config.PROJECT_ID}/locations/global/collections/default_collection/engines?engineId={data_store_id}"
 
     # Headers for the request
     headers = {
@@ -29,8 +30,8 @@ def create_doc_search_app() -> Optional[Dict[str, Any]]:
 
     # Request payload
     data = {
-        "displayName": config.DATA_STORE_DISPLAY_NAME,
-        "dataStoreIds": [config.DATA_STORE_ID],
+        "displayName": data_store_display_name,
+        "dataStoreIds": [data_store_id],
         "solutionType": "SOLUTION_TYPE_SEARCH"
     }
 
@@ -45,7 +46,9 @@ def create_doc_search_app() -> Optional[Dict[str, Any]]:
     
 
 if __name__ == '__main__':
-    result = create_doc_search_app()
+    display_name = "quarterly-reports"
+    store_id = "quarterly-reports"
+    result = create_doc_search_app(display_name, store_id)
     if result:
         logger.info(f"App creation result: {json.dumps(result, indent=2)}")
     else:
