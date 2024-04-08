@@ -2,6 +2,9 @@ from src.config.logging import logger
 from src.config.setup import config
 from typing import Dict, Any
 import requests
+from google.cloud import discoveryengine_v1beta as discoveryengine
+
+
 
 
 def create_data_store(data_store_display_name: str, data_store_id: str) -> Dict[str, Any]:
@@ -28,11 +31,11 @@ def create_data_store(data_store_display_name: str, data_store_id: str) -> Dict[
 
     data = {
         'displayName': data_store_display_name,
-        'industryVertical': 'GENERIC',
-        'solutionTypes': ['SOLUTION_TYPE_SEARCH'],
-        'contentConfig': 'CONTENT_REQUIRED',
-        'searchTier': 'ENTERPRISE',
-        'searchAddOns': ['LLM']
+        'industryVertical': discoveryengine.IndustryVertical.GENERIC,
+        'solutionTypes': [discoveryengine.SolutionType.SOLUTION_TYPE_SEARCH],
+        'contentConfig': discoveryengine.DataStore.ContentConfig.CONTENT_REQUIRED,
+        'searchTier': discoveryengine.SearchTier.SEARCH_TIER_ENTERPRISE,
+        'searchAddOns': [discoveryengine.SearchAddOn.SEARCH_ADD_ON_LLM]
     }
 
     try:
