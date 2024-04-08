@@ -12,7 +12,11 @@ import os
 
 
 def extract_details_from_filename(filename: str) -> Optional[Dict[str, str]]:
-    """Extract company and time period from the filename using regex."""
+    """Extract company and time period from the PDF filename using regex."""
+    if not filename.endswith('.pdf'):
+        logger.warning(f"Skipped non-PDF file: {filename}")
+        return None
+    
     try:
         pattern = r'^(?P<company>[\w\-]+)-q(?P<quarter>\d)-(?P<year>\d{4})\.pdf$'
         match = re.match(pattern, filename)
@@ -24,6 +28,7 @@ def extract_details_from_filename(filename: str) -> Optional[Dict[str, str]]:
     except re.error as e:
         logger.error(f"Regex error when processing filename {filename}: {e}")
         return None
+
 
 
 def generate_json_data(blobs: List[storage.Blob]) -> List[str]:
@@ -57,7 +62,7 @@ def upload_file_to_gcs(source_file_name: str, destination_blob_name: str):
     except GoogleCloudError as e:
         logger.error(f"Failed to upload {source_file_name} to GCS: {e}")
 
-def main():
+def create_manifest():
     prefix = 'raw_docs/'
 
     try:
@@ -82,9 +87,9 @@ def main():
         logger.info(f'Data written to {output_file_path}')
 
         # Upload metadata.json to GCS
-        upload_file_to_gcs(output_file_path, prefix + 'output_data.json')
+        upload_file_to_gcs(output_file_path, prefix + 'metadata.json')
     except Exception as e:
         logger.error(f"An error occurred: {e}")
 
 if __name__ == '__main__':
-    main()
+    create_manifest()
