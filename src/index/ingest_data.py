@@ -45,5 +45,5 @@ def ingest_documents(gcs_input_uri: str, data_store_id: str) -> None:
 # Example Usage
 if __name__ == '__main__':
     gcs_uri = f'gs://{config.BUCKET}/raw_docs'
-    data_store = 'quaterly-reports'
+    data_store = 'quarterly-reports'
     ingest_documents(gcs_uri, data_store)
