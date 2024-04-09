@@ -45,5 +45,5 @@ def ingest_documents(gcs_input_uri: str, data_store_id: str) -> None:
 
 if __name__ == '__main__':
     gcs_uri = f'gs://{config.BUCKET}/raw_docs/metadata.json'
-    data_store = 'quarterly-reports-100'
+    data_store = 'quarterly-reports'
     ingest_documents(gcs_uri, data_store)
