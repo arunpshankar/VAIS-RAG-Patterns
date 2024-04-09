@@ -49,7 +49,7 @@ def create_index_for_document_search(data_store_display_name, data_store_id, gcs
 
 if __name__ == '__main__':
     validate_configuration(config)
-    data_store_display_name = 'quarterly-reports-2'
+    data_store_display_name = 'quarterly-reports'
     data_store_id = 'quarterly-reports'
     gcs_input_uri = f'gs://{config.BUCKET}/raw_docs/metadata.json'
     create_index_for_document_search(data_store_display_name, data_store_id, gcs_input_uri)
