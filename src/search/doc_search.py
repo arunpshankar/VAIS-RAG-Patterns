@@ -203,7 +203,7 @@ def search(query: str, brand: str, data_store_id: str) -> Dict[str, Any]:
 if __name__ == "__main__":
     query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
     brand = "Alphabet"
-    data_store_id = "quarterly-reports"
+    data_store_id = "quarterly-reports-2"
 
     result = search(query, brand, data_store_id)
     print(result)

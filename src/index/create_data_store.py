@@ -1,10 +1,10 @@
+from google.cloud.discoveryengine_v1beta import IndustryVertical
+from google.cloud.discoveryengine_v1beta import SolutionType
+from google.cloud.discoveryengine_v1beta import DataStore
 from src.config.logging import logger
 from src.config.setup import config
 from typing import Dict, Any
 import requests
-from google.cloud import discoveryengine_v1beta as discoveryengine
-
-
 
 
 def create_data_store(data_store_display_name: str, data_store_id: str) -> Dict[str, Any]:
@@ -31,11 +31,9 @@ def create_data_store(data_store_display_name: str, data_store_id: str) -> Dict[
 
     data = {
         'displayName': data_store_display_name,
-        'industryVertical': discoveryengine.IndustryVertical.GENERIC,
-        'solutionTypes': [discoveryengine.SolutionType.SOLUTION_TYPE_SEARCH],
-        'contentConfig': discoveryengine.DataStore.ContentConfig.CONTENT_REQUIRED,
-        'searchTier': discoveryengine.SearchTier.SEARCH_TIER_ENTERPRISE,
-        'searchAddOns': [discoveryengine.SearchAddOn.SEARCH_ADD_ON_LLM]
+        'industryVertical': IndustryVertical.GENERIC,
+        'solutionTypes': SolutionType.SOLUTION_TYPE_SEARCH,
+        'contentConfig': DataStore.ContentConfig.CONTENT_REQUIRED
     }
 
     try:

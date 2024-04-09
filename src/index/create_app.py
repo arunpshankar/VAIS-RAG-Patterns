@@ -1,3 +1,4 @@
+from google.cloud import discoveryengine_v1beta as discoveryengine
 from src.config.logging import logger
 from src.config.setup import config
 from typing import Optional
@@ -5,6 +6,7 @@ from typing import Dict
 from typing import Any
 import requests
 import json
+
 
 
 def create_doc_search_app(data_store_display_name: str, data_store_id: str) -> Optional[Dict[str, Any]]:
@@ -32,7 +34,11 @@ def create_doc_search_app(data_store_display_name: str, data_store_id: str) -> O
     data = {
         "displayName": data_store_display_name,
         "dataStoreIds": [data_store_id],
-        "solutionType": "SOLUTION_TYPE_SEARCH"
+        "solutionType": discoveryengine.SolutionType.SOLUTION_TYPE_SEARCH,
+        "searchEngineConfig": {
+            "searchTier": discoveryengine.SearchTier.SEARCH_TIER_ENTERPRISE,
+            "searchAddOns": discoveryengine.SearchAddOn.SEARCH_ADD_ON_LLM
+        }
     }
 
     try:
@@ -43,6 +49,7 @@ def create_doc_search_app(data_store_display_name: str, data_store_id: str) -> O
     except requests.exceptions.RequestException as e:
         logger.error(f"Failed to create document search app: {str(e)}")
         return None
+    
     
 
 if __name__ == '__main__':
