@@ -5,7 +5,8 @@ from src.config.logging import logger
 from src.config.setup import config
 from typing import Optional
 from typing import Dict
-from typing import Any 
+from typing import List
+from typing import Any
 
 
 LOCATION = "global" 
@@ -17,10 +18,10 @@ def search_data_store(search_query: str, filter_str: str, data_store_id: str) ->
     Args:
         search_query (str): The search query string.
         filter_str (str): Filter string for the query.
-        data_store_d (str): Vertex AI Search Data Store ID.
+        data_store_id (str): Vertex AI Search Data Store ID.
 
     Returns:
-        discoveryengine.SearchResponse: The search response from the Discovery Engine API.
+        Optional[discoveryengine.SearchResponse]: The search response from the Discovery Engine API.
     """
     try:
         client_options = (
@@ -76,15 +77,15 @@ def search_data_store(search_query: str, filter_str: str, data_store_id: str) ->
         return None
 
 
-def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]):
+def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]) -> List[Dict[str, Any]]:
     """
     Extracts company, title, snippet, and link from the search response.
 
     Args:
-        response (discoveryengine.SearchResponse): The search response object from the Discovery Engine API.
+        response (Optional[discoveryengine.SearchResponse]): The search response object from the Discovery Engine API.
 
     Returns:
-        List[Dict[str, str]]: A list of dictionaries containing the extracted information.
+        List[Dict[str, Any]]: A list of dictionaries containing the extracted information.
     """
     extracted_data = []
 
@@ -94,7 +95,7 @@ def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]):
     
     summary = response.summary.summary_text
     if summary:
-        extracted_data.append(summary)
+        extracted_data.append({"summarized_answer": summary})
         
     for result in response.results:
         data = {
@@ -127,20 +128,14 @@ def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]):
         data['time_period'] = time_period
 
         # Collect extractive answers 
-        extractive_answers = derived_struct_data.get("extractive_answers")
-        if extractive_answers:
-            answers = []
-            for answer in extractive_answers:
-                answers.append(answer["content"])
+        extractive_answers = derived_struct_data.get("extractive_answers", [])
+        answers = [answer["content"] for answer in extractive_answers]
         data['extractive_answers'] = answers
 
-        # Collect extractive segmentss
-        extractive_segments = derived_struct_data.get("extractive_segments")
-        if extractive_segments:
-            segments = []
-            for segment in extractive_segments:
-                segments.append(segment["content"])
-            data["extractive_segments"] = segments
+        # Collect extractive segments
+        extractive_segments = derived_struct_data.get("extractive_segments", [])
+        segments = [segment["content"] for segment in extractive_segments]
+        data["extractive_segments"] = segments
 
         # Extracting link
         link = derived_struct_data.get("link")
@@ -151,18 +146,17 @@ def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]):
     return extracted_data
 
 
-def create_summary_dict(matches):
+def create_summary_dict(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Create a dictionary with the relevant data extracted from the matches.
 
     :param matches: List of match data extracted.
     :return: A dictionary containing the summary and details of each match.
     """
-    summary_dict = {"summarized_answer": matches[0]}
+    summary_dict = {"summarized_answer": matches[0]["summarized_answer"]}
     match_info = []
 
-    rank = 1
-    for match in matches[1:]:
+    for rank, match in enumerate(matches[1:], start=1):
         info = {
             "rank": rank,
             "id": match["id"],
@@ -174,28 +168,28 @@ def create_summary_dict(matches):
             "extractive_segments": match["extractive_segments"]
         }
         match_info.append(info)
-        rank += 1
 
     summary_dict["match_info"] = match_info
 
     return summary_dict
 
 
-def search(query: str, brand: str, data_store_id: str) -> Dict[str, Any]:
+def search(query: str, company: str, time_period: str, data_store_id: str) -> Dict[str, Any]:
     """
-    Searches a data store based on a given search query and brand, 
+    Searches a data store based on a given search query and filter, 
     then consolidates the results in a dictionary.
 
     Parameters:
     query (str): The query used for searching the data store.
-    brand (str): The brand to filter the search results.
+    company (str): The company name.
+    time_period (str): The time period.
     data_store_id (str): Vertex AI Search Data Store ID.
 
     Returns:
     Dict[str, Any]: A dictionary containing the consolidated results of the search.
                     Returns an empty dictionary if an error occurs.
     """
-    filter_str = f"company: ANY(\"{brand}\")"
+    filter_str = f"company: ANY(\"{company}\") AND time_period: ANY(\"{time_period}\")"
 
     try:
         # Perform the search with the provided query and filter
@@ -213,14 +207,15 @@ def search(query: str, brand: str, data_store_id: str) -> Dict[str, Any]:
         # Log the error and return an empty dictionary or an error message
         logger.error(f"Error executing search_data_store: {e}")
         return {}
-    
+
 
 if __name__ == "__main__":
     query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
-    brand = "alphabet"
+    company = "alphabet"
+    time_period = "Q1 2021"
     data_store_id = "quarterly-reports"
 
-    results = search(query, brand, data_store_id)
+    results = search(query, company, time_period, data_store_id)
     summarized_ans = results['summarized_answer']
     print(summarized_ans)
     match_info = results['match_info']
