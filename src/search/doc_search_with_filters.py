@@ -5,22 +5,22 @@ from src.config.logging import logger
 from src.config.setup import config
 from typing import Optional
 from typing import Dict
-from typing import List
-from typing import Any
+from typing import Any 
 
 
 LOCATION = "global" 
 
-def search_data_store(search_query: str, data_store_id: str) -> Optional[discoveryengine.SearchResponse]:
+def search_data_store(search_query: str, filter_str: str, data_store_id: str) -> Optional[discoveryengine.SearchResponse]:
     """
-    Searches the data store using Google Cloud's Discovery Engine API.
+    Search the data store using Google Cloud's Discovery Engine API.
 
     Args:
         search_query (str): The search query string.
-        data_store_id (str): Vertex AI Search Data Store ID.
+        filter_str (str): Filter string for the query.
+        data_store_d (str): Vertex AI Search Data Store ID.
 
     Returns:
-        Optional[discoveryengine.SearchResponse]: The search response from the Discovery Engine API.
+        discoveryengine.SearchResponse: The search response from the Discovery Engine API.
     """
     try:
         client_options = (
@@ -57,6 +57,7 @@ def search_data_store(search_query: str, data_store_id: str) -> Optional[discove
         request = discoveryengine.SearchRequest(
             serving_config=serving_config,
             query=search_query,
+            filter=filter_str,
             page_size=5,
             content_search_spec=content_search_spec,
             query_expansion_spec=discoveryengine.SearchRequest.QueryExpansionSpec(
@@ -75,15 +76,15 @@ def search_data_store(search_query: str, data_store_id: str) -> Optional[discove
         return None
 
 
-def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]) -> List[Dict[str, Any]]:
+def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]):
     """
-    Extracts title, snippet, and link from the search response.
+    Extracts company, title, snippet, and link from the search response.
 
     Args:
-        response (Optional[discoveryengine.SearchResponse]): The search response object from the Discovery Engine API.
+        response (discoveryengine.SearchResponse): The search response object from the Discovery Engine API.
 
     Returns:
-        List[Dict[str, Any]]: A list of dictionaries containing the extracted information.
+        List[Dict[str, str]]: A list of dictionaries containing the extracted information.
     """
     extracted_data = []
 
@@ -100,6 +101,8 @@ def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]) ->
             "id": "",
             "title": "",
             "link": "",
+            "company": "",
+            "time_period": "",
             "extractive_answers": [],
             "extractive_segments": []
         }
@@ -117,15 +120,27 @@ def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]) ->
         title = derived_struct_data['title']
         data['title'] = title
 
+        company = struct_data['company']
+        data['company'] = company
+
+        time_period = struct_data['time_period']
+        data['time_period'] = time_period
+
         # Collect extractive answers 
-        extractive_answers = derived_struct_data.get("extractive_answers", [])
-        answers = [answer["content"] for answer in extractive_answers]
+        extractive_answers = derived_struct_data.get("extractive_answers")
+        if extractive_answers:
+            answers = []
+            for answer in extractive_answers:
+                answers.append(answer["content"])
         data['extractive_answers'] = answers
 
-        # Collect extractive segments
-        extractive_segments = derived_struct_data.get("extractive_segments", [])
-        segments = [segment["content"] for segment in extractive_segments]
-        data["extractive_segments"] = segments
+        # Collect extractive segmentss
+        extractive_segments = derived_struct_data.get("extractive_segments")
+        if extractive_segments:
+            segments = []
+            for segment in extractive_segments:
+                segments.append(segment["content"])
+            data["extractive_segments"] = segments
 
         # Extracting link
         link = derived_struct_data.get("link")
@@ -136,15 +151,12 @@ def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]) ->
     return extracted_data
 
 
-def create_summary_dict(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
+def create_summary_dict(matches):
     """
-    Creates a dictionary with the relevant data extracted from the matches.
+    Create a dictionary with the relevant data extracted from the matches.
 
-    Args:
-        matches (List[Dict[str, Any]]): List of match data extracted.
-
-    Returns:
-        Dict[str, Any]: A dictionary containing the summary and details of each match.
+    :param matches: List of match data extracted.
+    :return: A dictionary containing the summary and details of each match.
     """
     summary_dict = {"summarized_answer": matches[0]}
     match_info = []
@@ -156,6 +168,8 @@ def create_summary_dict(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
             "id": match["id"],
             "title": match["title"],
             "link": match["link"],
+            "company": match["company"],
+            "time_period": match["time_period"],
             "extractive_answers": match["extractive_answers"],
             "extractive_segments": match["extractive_segments"]
         }
@@ -167,22 +181,25 @@ def create_summary_dict(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
     return summary_dict
 
 
-def search(query: str, data_store_id: str) -> Dict[str, Any]:
+def search(query: str, brand: str, data_store_id: str) -> Dict[str, Any]:
     """
     Searches a data store based on a given search query and brand, 
     then consolidates the results in a dictionary.
 
     Parameters:
     query (str): The query used for searching the data store.
+    brand (str): The brand to filter the search results.
     data_store_id (str): Vertex AI Search Data Store ID.
 
     Returns:
-        Dict[str, Any]: A dictionary containing the consolidated results of the search.
-                        Returns an empty dictionary if an error occurs.
+    Dict[str, Any]: A dictionary containing the consolidated results of the search.
+                    Returns an empty dictionary if an error occurs.
     """
+    filter_str = f"company: ANY(\"{brand}\")"
+
     try:
         # Perform the search with the provided query and filter
-        hits = search_data_store(query, data_store_id)
+        hits = search_data_store(query, filter_str, data_store_id)
 
         # Extract relevant data from the search results
         matches = extract_relevant_data(hits)
@@ -200,12 +217,12 @@ def search(query: str, data_store_id: str) -> Dict[str, Any]:
 
 if __name__ == "__main__":
     query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
+    brand = "alphabet"
     data_store_id = "quarterly-reports"
 
-    results = search(query, data_store_id)
+    results = search(query, brand, data_store_id)
     summarized_ans = results['summarized_answer']
-    print(f'Summarized Answer = {summarized_ans}')
-    print()
+    print(summarized_ans)
     match_info = results['match_info']
     for item in match_info:
         print(item)
