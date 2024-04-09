@@ -100,6 +100,8 @@ def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]) ->
             "id": "",
             "title": "",
             "link": "",
+            "company": "",
+            "time_period": "",
             "extractive_answers": [],
             "extractive_segments": []
         }
@@ -116,6 +118,12 @@ def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]) ->
 
         title = derived_struct_data['title']
         data['title'] = title
+
+        company = struct_data['company']
+        data['company'] = company
+
+        time_period = struct_data['time_period']
+        data['time_period'] = time_period
 
         # Collect extractive answers 
         extractive_answers = derived_struct_data.get("extractive_answers", [])
@@ -156,6 +164,8 @@ def create_summary_dict(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
             "id": match["id"],
             "title": match["title"],
             "link": match["link"],
+            "company": match["company"],
+            "time_period": match["time_period"],
             "extractive_answers": match["extractive_answers"],
             "extractive_segments": match["extractive_segments"]
         }
