@@ -55,7 +55,7 @@ class LLM:
             human_message = HumanMessagePromptTemplate.from_template(human_template)
             chat_template = ChatPromptTemplate.from_messages([human_message])
             prompt = chat_template.format_prompt(task=task, query=query).to_messages()
-            response = self.model(prompt)
+            response = self.model.invoke(prompt)
             completion = response.content
             return completion
         except Exception as e:
