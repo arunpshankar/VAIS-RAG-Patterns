@@ -44,12 +44,18 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
         company = entities['company']
         company = company.strip().lower()
         time_period = entities['time_period']
-
+        
         try:
             results = search(question, company, time_period, data_store_id)
             summarized_ans = results['summarized_answer']
             match_info = results['match_info']
-            matched_docs = [f"{info['company']}-{info['time_period'].lower()}.replace(' ', '-')" for info in match_info]
+            matched_docs = []
+            for info in match_info:
+                company = info['company']
+                time_period = info['time_period'].lower()
+                time_period = time_period.lower().replace(' ', '-')
+                matched_doc = f'{company}-{time_period}'
+                matched_docs.append(matched_doc)
             eval_results.append((question, expected_ans, summarized_ans, expected_doc, matched_docs))
         except Exception as e:
             logger.error(f"Error processing question '{question}': {e}")
