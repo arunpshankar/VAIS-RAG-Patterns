@@ -64,10 +64,10 @@ def save_data_to_csv(data: pd.DataFrame, directory: str, filename: str) -> None:
 
 
 if __name__ == "__main__":
-    file_path = './data/eval/01.csv'
+    file_path = './data/eval/02.csv'
     data = pd.read_csv(file_path)
     processed_data = process_data_frame(data)
-    save_data_to_csv(processed_data, './data/eval', '01_processed_metrics.csv')
+    save_data_to_csv(processed_data, './data/eval', '02_processed_metrics.csv')
     
     # Calculate and print the averages for all metrics
     averages = processed_data[['P@1', 'P@3', 'P@5', 'MRR', 'NDCG', 'Recall@5']].mean()
