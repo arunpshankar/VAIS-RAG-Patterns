@@ -23,7 +23,7 @@ def extract_entities(query: str) -> Dict[str, str]:
     prompt = """Given the query below, extract the company name from it. The company name can be either Microsoft, Alphabet, or Amazon. If company 'LinkedIn' is found, translate to 'Microsoft'."""
     extracted_entities['company'] = extract_entity(prompt, query)
     prompt = """Given a query, extract the specific time period from it. A valid time period should be in the form 'Q1 2021' only. 
-Examples of invalid formats include: 'Q2 2020 to Q2 2021', 'Q2 2020 - Q2 2021', 'Q2 2020, Q2 2021', and ‘Q1 2020 Q2 2020' etc. 
+Examples of invalid formats include: 'Q2 2020 to Q2 2021', Q4 2021\nQ4 2022, 'Q2 2020 - Q2 2021', 'Q2 2020, Q2 2021', and ‘Q1 2020 Q2 2020' etc. 
 The extracted time period should represent only one quarter and one year, corresponding to the present vs past. 
 IMPORTANT: Ignore past references when the query is comparing the present to the past. 
 Translate 'first quarter of 2020' to 'Q1 2020'.
