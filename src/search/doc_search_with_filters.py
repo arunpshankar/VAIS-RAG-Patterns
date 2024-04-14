@@ -189,7 +189,14 @@ def search(query: str, company: str, time_period: str, data_store_id: str) -> Di
     Dict[str, Any]: A dictionary containing the consolidated results of the search.
                     Returns an empty dictionary if an error occurs.
     """
-    filter_str = f"company: ANY(\"{company}\") AND time_period: ANY(\"{time_period}\")"
+    if company and time_period:
+        filter_str = f"company: ANY(\"{company}\") AND time_period: ANY(\"{time_period}\")"
+    elif company and not time_period:
+        filter_str = f"company: ANY(\"{company}\")"
+    elif not company and time_period:
+        filter_str = f"time_period: ANY(\"{time_period}\")"
+    else:
+        filter_str = ""
 
     try:
         # Perform the search with the provided query and filter
@@ -210,9 +217,9 @@ def search(query: str, company: str, time_period: str, data_store_id: str) -> Di
 
 
 if __name__ == "__main__":
-    query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
-    company = "alphabet"
-    time_period = "Q1 2021"
+    query = "What were Amazon's basic earnings per share (EPS) for Q4 2021, Q4 2022, the full year of 2021, and the full year of 2022?"
+    company = "amazon"
+    time_period = "Q4 2022"
     data_store_id = "quarterly-reports"
 
     results = search(query, company, time_period, data_store_id)

@@ -5,6 +5,7 @@ from typing import Tuple
 from typing import List
 from tqdm import tqdm
 import pandas as pd
+import re
 
 
 def load_data(file_path: str) -> pd.DataFrame:
@@ -22,6 +23,22 @@ def load_data(file_path: str) -> pd.DataFrame:
     except Exception as e:
         logger.error(f"Failed to load data from {file_path}: {e}")
         raise
+
+
+def validate_company(company):
+    valid_companies = ['alphabet', 'microsoft', 'amazon']
+    company = company.strip().lower()
+    if company in valid_companies:
+        return company
+    return ""
+
+
+def validate_time_period(time_period):
+    # Regex to match "Q[1-4] 20[20-23]"
+    pattern = r'Q[1-4] 20[2][0-3]'
+    if re.fullmatch(pattern, time_period.strip()):
+        return time_period
+    return ""
 
 
 def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tuple[str, str, str, str, List[str]]]:
@@ -44,6 +61,8 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
         company = entities['company']
         company = company.strip().lower()
         time_period = entities['time_period']
+        company = validate_company(company)
+        time_period = validate_time_period(time_period)
         
         try:
             results = search(question, company, time_period, data_store_id)
