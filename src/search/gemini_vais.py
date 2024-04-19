@@ -26,5 +26,5 @@ print(answers)
 
 
 
-if __name__ == '_-main__':
+if __name__ == '__main__':
     pass
