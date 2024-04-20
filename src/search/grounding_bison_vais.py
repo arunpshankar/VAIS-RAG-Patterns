@@ -7,7 +7,6 @@ from typing import Tuple
 from typing import List 
 
 
-
 DATA_STORE_LOCATION = 'global'
 
 MODEL_NAME = 'text-bison@002'
