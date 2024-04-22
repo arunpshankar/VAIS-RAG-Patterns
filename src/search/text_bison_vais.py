@@ -47,9 +47,7 @@ def generate_answer_with_citations(data_store_id: str, query: str) -> Tuple[Opti
         }
 
         # Generate the response
-        response = model.predict(
-            query, grounding_source=grounding_source, **parameters
-        )
+        response = model.predict(query, grounding_source=grounding_source, **parameters)
 
         logger.info(f"Answer: {response.text}")
 
