@@ -6,8 +6,6 @@ from vertexai.preview.generative_models import Tool
 from src.config.logging import logger 
 from src.config.setup import *
 from typing import Optional
-from typing import Tuple
-from typing import List 
 
 
 # Constants
@@ -17,7 +15,7 @@ MAX_OUTPUT_TOKENS = 8192
 TOP_P = 0.0  # TOP_K is not applicable to Gemini pro 002
 
 
-def generate_text_with_grounding_web(prompt: str) -> Optional[str]:
+def generate_text_with_grounding_web(prompt: str) -> Optional[GenerationResponse]:
     """
     Generates text using the Gemini model with grounding based on Google Search.
     
@@ -25,7 +23,7 @@ def generate_text_with_grounding_web(prompt: str) -> Optional[str]:
         prompt (str): The input text prompt for generating the response.
         
     Returns:
-        Optional[str]: The generated text if successful, None otherwise.
+        Optional[GenerationResponse]: The generated response object if successful, None otherwise.
     """
     try:
         # Load the model
@@ -44,17 +42,32 @@ def generate_text_with_grounding_web(prompt: str) -> Optional[str]:
                 top_p=TOP_P
             ),
         )
-        answer = response.candidates[0].content.parts[0].text
-        return answer
+        return response
     except Exception as e:
         logger.error(f"Error during text generation: {e}", exc_info=True)
         return None
+
+
+def extract_answer_from_response(response: Optional[GenerationResponse]) -> Optional[str]:
+    """
+    Extracts the text part of the answer from the response object.
+    
+    Parameters:
+        response (Optional[GenerationResponse]): The response object from which to extract the text.
+        
+    Returns:
+        Optional[str]: The extracted text if the response contains any, None otherwise.
+    """
+    if response is None or not response.candidates:
+        return None
+    return response.candidates[0].content.parts[0].text
     
 
 if __name__ == '__main__':
     query = "How much did Amazon's net sales increase in Q2 2021 compared to Q2 2020?"
-    response = generate_text_with_grounding_web(query)
-    if response is not None:
-        print(response)
+    generated_response = generate_text_with_grounding_web(query)
+    answer = extract_answer_from_response(generated_response)
+    if answer is not None:
+        print(answer)
     else:
         print("Failed to generate response.")
