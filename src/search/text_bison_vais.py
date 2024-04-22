@@ -1,4 +1,4 @@
-from vertexai.language_models import TextGenerationModel, GroundingSource
+from vertexai.language_models import TextGenerationModel
 from vertexai.language_models import GroundingSource
 from src.config.logging import logger 
 from src.config.setup import *

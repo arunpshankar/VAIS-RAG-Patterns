@@ -76,7 +76,7 @@ def extract_answer_from_response(response: Optional[GenerationResponse]) -> Opti
 if __name__ == '__main__':
     data_store_id = 'quarterly-reports'
     data_store_path = f'projects/{config.PROJECT_ID}/locations/{DATA_STORE_LOCATION}/collections/default_collection/dataStores/{data_store_id}'
-    query = "How many Microsoft 365 Consumer subscribers were there as of Q2 2021?"
+    query = "How much did Google spend on R&D (in billions) in Q1 of 2021 compared to the same period in the previous year?"
 
     response = generate_text_with_grounding_vais(data_store_path, query)
     print(response)
