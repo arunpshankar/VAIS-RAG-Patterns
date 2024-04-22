@@ -3,6 +3,7 @@ from vertexai.preview.generative_models import GenerationConfig
 from vertexai.preview.generative_models import GenerativeModel
 from vertexai.preview.generative_models import grounding
 from vertexai.preview.generative_models import Tool
+from vertexai.preview import generative_models
 from src.config.logging import logger
 from src.config.setup import config
 from typing import Optional
@@ -14,6 +15,12 @@ TEMPERATURE = 0.0  # Gemini Pro 002 temperature can be set between 0 and 2
 MAX_OUTPUT_TOKENS = 8192
 TOP_P = 0.0  # TOP_K is not applicable to Gemini Pro 002
 DATA_STORE_LOCATION = 'global'
+
+# Safety config
+safety_config = {
+    generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+}
 
 
 def generate_text_with_grounding_vais(data_store_path: str, query: str) -> Optional[GenerationResponse]:
@@ -42,7 +49,8 @@ def generate_text_with_grounding_vais(data_store_path: str, query: str) -> Optio
                 temperature=TEMPERATURE,
                 max_output_tokens=MAX_OUTPUT_TOKENS,
                 top_p=TOP_P
-            )
+            ),
+            safety_settings=safety_config
         )
         return response
     except Exception as e:
@@ -68,12 +76,12 @@ def extract_answer_from_response(response: Optional[GenerationResponse]) -> Opti
 if __name__ == '__main__':
     data_store_id = 'quarterly-reports'
     data_store_path = f'projects/{config.PROJECT_ID}/locations/{DATA_STORE_LOCATION}/collections/default_collection/dataStores/{data_store_id}'
-    query = "How much did Amazon's net sales increase in Q2 2021 compared to Q2 2020?"
+    query = "How many Microsoft 365 Consumer subscribers were there as of Q2 2021?"
 
     response = generate_text_with_grounding_vais(data_store_path, query)
     print(response)
     if response:
         answer = extract_answer_from_response(response)
-        print(f"Generated answer: {answer}")
+        print(f"Answer: {answer}")
     else:
         print("Failed to generate response.")
