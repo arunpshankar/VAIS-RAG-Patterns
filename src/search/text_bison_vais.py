@@ -12,7 +12,7 @@ DATA_STORE_LOCATION = 'global'
 MODEL_NAME = 'text-bison@002'
 TEMPERATURE = 0.0
 MAX_OUTPUT_TOKENS = 2048
-TOP_P = 1.0  # Tokens are selected from most probable to least until the sum of their probabilities equals the top_p value.
+TOP_P = 0.0  # Tokens are selected from most probable to least until the sum of their probabilities equals the top_p value.
 TOP_K = 1  # # A top_k of 1 means the selected token is the most probable among all tokens.
 
 
