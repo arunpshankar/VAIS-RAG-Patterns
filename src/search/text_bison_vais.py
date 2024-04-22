@@ -16,10 +16,7 @@ TOP_P = 1.0  # Tokens are selected from most probable to least until the sum of 
 TOP_K = 1  # # A top_k of 1 means the selected token is the most probable among all tokens.
 
 
-def generate_answer_with_citations(
-    data_store_id: str, 
-    query: str
-) -> Tuple[Optional[str], List[str]]:
+def generate_answer_with_citations(data_store_id: str, query: str) -> Tuple[Optional[str], List[str]]:
     """Generates an answer to the provided query using a language model and
     cited sources from the specified VertexAI Datastore.
 
