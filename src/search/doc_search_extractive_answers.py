@@ -2,9 +2,9 @@ from src.search.utils import extract_relevant_data
 from src.search.utils import create_summary_dict
 from src.search.utils import search_data_store
 from src.config.logging import logger 
-from typing import Dict
-from typing import List 
+from typing import Dict 
 from typing import Any
+import os
 
 
 def search(query: str, data_store_id: str) -> Dict[str, Any]:
@@ -38,7 +38,23 @@ def search(query: str, data_store_id: str) -> Dict[str, Any]:
         return {}
     
 
-def get_top_extractive_answers(results: Dict[str, Any], n: int) -> List[str]:
+def extract_filename(file_path: str) -> str:
+    """
+    Extracts the filename without extension from a given GCS path.
+
+    Parameters:
+    file_path (str): The full path of the file.
+
+    Returns:
+    str: The filename without the extension.
+    """
+    # Extract the base name from the path
+    base_name = os.path.basename(file_path)
+    # Split the base name and extension and return only the base name
+    return os.path.splitext(base_name)[0]
+
+
+def get_top_extractive_answers(results: Dict[str, Any], n: int) -> str:
     """
     Retrieves the top N extractive answers from the search results.
 
@@ -53,12 +69,13 @@ def get_top_extractive_answers(results: Dict[str, Any], n: int) -> List[str]:
     try:
         # Retrieve up to N extractive answers if they exist
         for info in results.get('match_info', [])[:n]:
-            extractive_answers.append(info.get('extractive_answers', 'No answer found')[0])
+            source = extract_filename(info['link'])
+            extractive_answers.append(info.get('extractive_answers', 'No answer found')[0] + f' Ref:[{source}]')
     except Exception as e:
         # Handle any errors that might occur
         print(f"Error retrieving extractive answers: {e}")
 
-    return extractive_answers
+    return '\n\n'.join(extractive_answers)
 
 
 if __name__ == "__main__":
@@ -66,5 +83,5 @@ if __name__ == "__main__":
     data_store_id = "quarterly-reports"
 
     results = search(query, data_store_id)
-    answers = get_top_extractive_answers(results, 2)[0]
+    answers = get_top_extractive_answers(results, 2)
     print(answers)
