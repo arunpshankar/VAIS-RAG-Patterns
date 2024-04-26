@@ -2,12 +2,10 @@ from google.cloud import discoveryengine_v1beta as discoveryengine
 from google.api_core.client_options import ClientOptions
 from src.search.utils import extract_relevant_data
 from src.search.utils import create_summary_dict
-from google.protobuf import json_format
 from src.config.logging import logger 
 from src.config.setup import config
 from typing import Optional
 from typing import Dict
-from typing import List
 from typing import Any
 
 
