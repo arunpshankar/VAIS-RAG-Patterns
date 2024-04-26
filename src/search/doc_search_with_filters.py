@@ -1,5 +1,7 @@
 from google.cloud import discoveryengine_v1beta as discoveryengine
 from google.api_core.client_options import ClientOptions
+from src.search.utils import extract_relevant_data
+from src.search.utils import create_summary_dict
 from google.protobuf import json_format
 from src.config.logging import logger 
 from src.config.setup import config
@@ -10,6 +12,7 @@ from typing import Any
 
 
 LOCATION = "global" 
+
 
 def search_data_store(search_query: str, filter_str: str, data_store_id: str) -> Optional[discoveryengine.SearchResponse]:
     """
@@ -75,103 +78,6 @@ def search_data_store(search_query: str, filter_str: str, data_store_id: str) ->
     except Exception as e:
         logger.error(f"Error during data store search: {e}")
         return None
-
-
-def extract_relevant_data(response: Optional[discoveryengine.SearchResponse]) -> List[Dict[str, Any]]:
-    """
-    Extracts company, title, snippet, and link from the search response.
-
-    Args:
-        response (Optional[discoveryengine.SearchResponse]): The search response object from the Discovery Engine API.
-
-    Returns:
-        List[Dict[str, Any]]: A list of dictionaries containing the extracted information.
-    """
-    extracted_data = []
-
-    if response is None:
-        logger.error("No response received to extract data.")
-        return extracted_data
-    
-    summary = response.summary.summary_text
-    if summary:
-        extracted_data.append({"summarized_answer": summary})
-        
-    for result in response.results:
-        data = {
-            "id": "",
-            "title": "",
-            "link": "",
-            "company": "",
-            "time_period": "",
-            "extractive_answers": [],
-            "extractive_segments": []
-        }
-
-        # Convert protocol buffer message to JSON
-        result_json = json_format.MessageToDict(result.document._pb)
-
-        # Extracting fields from JSON
-        struct_data = result_json.get('structData', {})
-        derived_struct_data = result_json.get('derivedStructData', {})
-
-        id = result_json['id']
-        data['id'] = id
-
-        title = derived_struct_data['title']
-        data['title'] = title
-
-        company = struct_data['company']
-        data['company'] = company
-
-        time_period = struct_data['time_period']
-        data['time_period'] = time_period
-
-        # Collect extractive answers 
-        extractive_answers = derived_struct_data.get("extractive_answers", [])
-        answers = [answer["content"] for answer in extractive_answers]
-        data['extractive_answers'] = answers
-
-        # Collect extractive segments
-        extractive_segments = derived_struct_data.get("extractive_segments", [])
-        segments = [segment["content"] for segment in extractive_segments]
-        data["extractive_segments"] = segments
-
-        # Extracting link
-        link = derived_struct_data.get("link")
-        if link:
-            data["link"] = link
-
-        extracted_data.append(data)
-    return extracted_data
-
-
-def create_summary_dict(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """
-    Create a dictionary with the relevant data extracted from the matches.
-
-    :param matches: List of match data extracted.
-    :return: A dictionary containing the summary and details of each match.
-    """
-    summary_dict = {"summarized_answer": matches[0]["summarized_answer"]}
-    match_info = []
-
-    for rank, match in enumerate(matches[1:], start=1):
-        info = {
-            "rank": rank,
-            "id": match["id"],
-            "title": match["title"],
-            "link": match["link"],
-            "company": match["company"],
-            "time_period": match["time_period"],
-            "extractive_answers": match["extractive_answers"],
-            "extractive_segments": match["extractive_segments"]
-        }
-        match_info.append(info)
-
-    summary_dict["match_info"] = match_info
-
-    return summary_dict
 
 
 def search(query: str, company: str, time_period: str, data_store_id: str) -> Dict[str, Any]:
