@@ -91,5 +91,11 @@ if __name__ == "__main__":
     data = pd.read_csv(file_path)
     processed_data = process_data_frame(data)
     final_data = append_averages_to_df(processed_data)
-    save_data_to_csv(final_data, './data/eval', '01_processed_metrics.csv')
+    save_data_to_csv(final_data, './data/eval/retrieval', '01_metrics.csv')
+
+    file_path = './data/eval/02.csv'
+    data = pd.read_csv(file_path)
+    processed_data = process_data_frame(data)
+    final_data = append_averages_to_df(processed_data)
+    save_data_to_csv(final_data, './data/eval/retrieval', '02_metrics.csv')
     logger.info("Metrics and averages saved successfully.")
