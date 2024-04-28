@@ -1,6 +1,8 @@
 from src.search.doc_search import search
+from src.eval.utils import save_results
 from src.config.logging import logger
 from src.eval.utils import load_data
+
 from typing import Tuple
 from typing import List
 from tqdm import tqdm
@@ -33,22 +35,6 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
             logger.error(f"Error processing question '{question}': {e}")
             eval_results.append((question, expected_ans, "Error in processing", expected_doc, []))
     return eval_results
-
-
-def save_results(eval_results: List[Tuple[str, str, str, str, List[str]]], output_file: str) -> None:
-    """
-    Save the evaluation results to a CSV file.
-
-    Parameters:
-    eval_results (List[Tuple[str, str, str, str, List[str]]]): The evaluation results.
-    output_file (str): The path to the output CSV file.
-    """
-    out_df = pd.DataFrame(eval_results, columns=['question', 'expected_answer', 'generated_answer', 'expected_document', 'matched_documents'])
-    try:
-        out_df.to_csv(output_file, index=False)
-        logger.info(f"Results saved successfully to {output_file}")
-    except Exception as e:
-        logger.error(f"Failed to save results to {output_file}: {e}")
 
 
 def main():
