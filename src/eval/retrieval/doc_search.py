@@ -2,7 +2,6 @@ from src.search.doc_search import search
 from src.eval.utils import save_results
 from src.config.logging import logger
 from src.eval.utils import load_data
-
 from typing import Tuple
 from typing import List
 from tqdm import tqdm

@@ -1,6 +1,6 @@
 from src.search.utils import extract_filename
+from src.search.utils import filtered_search
 from src.config.logging import logger 
-from src.search.utils import search
 from typing import Dict 
 from typing import Any
     
@@ -33,6 +33,6 @@ if __name__ == "__main__":
     query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
     data_store_id = "quarterly-reports"
 
-    results = search(query, data_store_id)
+    results = filtered_search(query, data_store_id)
     answers = get_top_extractive_answers(results, 2)
     print(answers)
