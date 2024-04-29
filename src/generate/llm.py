@@ -32,9 +32,8 @@ class LLM:
                 temperature=0.0,
                 top_k=1.0,
                 top_p=0.0,
-                max_output_tokens=1024,
-                verbose=True
-            )
+                max_output_tokens=16,
+                verbose=True)
             logger.info("Chat model loaded successfully.")
             return model
         except Exception as e:

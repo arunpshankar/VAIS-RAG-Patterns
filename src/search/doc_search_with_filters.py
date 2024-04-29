@@ -27,20 +27,29 @@ def get_filtered_summarized_answer(query: str, company: str, time_period: str, d
     except Exception as e:
         logger.error(f"Failed to retrieve data: {e}")
         return {'summarized_answer': "Error retrieving data.", 'match_info': []}
+    
+
+def extract_and_validate_entities(query, max_retries=5):
+    retry_count = 0
+    while retry_count < max_retries:
+        entities = extract_entities(query)
+        company = entities.get('company', '').strip().lower()
+        time_period = entities.get('time_period', '').strip()
+        
+        if validate_company(company) and validate_time_period(time_period):
+            return company, time_period
+        retry_count += 1
+        print(f"Retry {retry_count}/{max_retries}: Validation failed, retrying...")
+    
+    raise ValueError("Failed to validate entities after several attempts.")
 
 
 if __name__ == "__main__":
     query = "What were Amazon's basic earnings per share (EPS) for Q4 2021, Q4 2022, the full year of 2021, and the full year of 2022?"
+    data_store_id = "quarterly-reports"
     # company = "amazon"
     # time_period = "Q4 2022"
-    data_store_id = "quarterly-reports"
-    entities = extract_entities(query)
-    company = entities['company']
-    company = company.strip().lower()
-    time_period = entities['time_period']
-    company = validate_company(company)
-    time_period = validate_time_period(time_period)
+    company, time_period = extract_and_validate_entities(query)
     results = get_filtered_summarized_answer(query, company, time_period, data_store_id)
     summarized_ans = results['summarized_answer']
     print(f'Summarized Answer = {summarized_ans}')
-
