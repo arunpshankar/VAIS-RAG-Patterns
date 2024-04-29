@@ -3,6 +3,7 @@ from src.utils.validate import validate_company
 from src.generate.ner import extract_entities
 from src.search.utils import filtered_search
 from src.config.logging import logger
+from typing import Tuple
 
 
 def get_filtered_summarized_answer(query: str, company: str, time_period: str, data_store_id: str) -> dict:
@@ -29,13 +30,26 @@ def get_filtered_summarized_answer(query: str, company: str, time_period: str, d
         return {'summarized_answer': "Error retrieving data.", 'match_info': []}
     
 
-def extract_and_validate_entities(query, max_retries=5):
+def extract_and_validate_entities(query: str, max_retries: int = 5) -> Tuple[str, str]:
+    """
+    Extracts entities from a query and validates them with a maximum number of retries.
+
+    Parameters:
+        query (str): The query from which to extract entities.
+        max_retries (int): The maximum number of times to attempt validation.
+
+    Returns:
+        Tuple[str, str]: A tuple containing the validated company name and time period.
+
+    Raises:
+        ValueError: If entities cannot be validated after the specified number of attempts.
+    """
     retry_count = 0
     while retry_count < max_retries:
         entities = extract_entities(query)
         company = entities.get('company', '').strip().lower()
         time_period = entities.get('time_period', '').strip()
-        
+
         if validate_company(company) and validate_time_period(time_period):
             return company, time_period
         retry_count += 1

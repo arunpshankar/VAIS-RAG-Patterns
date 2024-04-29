@@ -32,6 +32,8 @@ def get_top_extractive_answers(results: Dict[str, Any], n: int) -> str:
 if __name__ == "__main__":
     query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
     data_store_id = "quarterly-reports"
+    # company = "amazon"
+    # time_period = "Q4 2022"
 
     results = filtered_search(query, data_store_id)
     answers = get_top_extractive_answers(results, 2)
