@@ -65,12 +65,18 @@ def extract_and_validate_entities(query: str, max_retries: int = 5) -> Tuple[str
     retry_count = 0
     while retry_count < max_retries:
         entities = extract_entities(query)
-        company = entities.get('company', '').strip().lower()
-        time_period = entities.get('time_period', '').strip()
+        company = entities.get('company')
+        time_period = entities.get('time_period')
+
+        if company:
+            company = company.strip().lower()
+        if time_period:
+            time_period = time_period.strip()
 
         if validate_company(company) and validate_time_period(time_period):
             return company, time_period
+
         retry_count += 1
         print(f"Retry {retry_count}/{max_retries}: Validation failed, retrying...")
-    
+
     raise ValueError("Failed to validate entities after several attempts.")
