@@ -30,6 +30,8 @@ class LLM:
             model = ChatVertexAI(
                 model_name=config.TEXT_GEN_MODEL_NAME,
                 temperature=0.0,
+                top_k=1.0,
+                top_p=0.0,
                 max_output_tokens=1024,
                 verbose=True
             )
