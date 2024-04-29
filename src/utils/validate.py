@@ -1,6 +1,7 @@
 from src.generate.ner import extract_entities
 from src.config.logging import logger
 from typing import Optional
+from typing import Tuple
 import re
 
 
@@ -24,6 +25,7 @@ def validate_company(company: str) -> Optional[str]:
     except Exception as e:
         logger.error(f"Error validating company name: {e}")
     return None
+
 
 def validate_time_period(time_period: str) -> Optional[str]:
     """
