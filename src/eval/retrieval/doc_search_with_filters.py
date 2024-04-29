@@ -1,4 +1,6 @@
 from src.search.doc_search_with_filters import search
+from src.utils.validate import validate_time_period
+from src.utils.validate import validate_company
 from src.generate.ner import extract_entities
 from src.eval.utils import save_results
 from src.config.logging import logger
@@ -7,23 +9,6 @@ from typing import Tuple
 from typing import List
 from tqdm import tqdm
 import pandas as pd
-import re
-
-
-def validate_company(company):
-    valid_companies = ['alphabet', 'microsoft', 'amazon']
-    company = company.strip().lower()
-    if company in valid_companies:
-        return company
-    return ""
-
-
-def validate_time_period(time_period):
-    # Regex to match "Q[1-4] 20[20-23]"
-    pattern = r'Q[1-4] 20[2][0-3]'
-    if re.fullmatch(pattern, time_period.strip()):
-        return time_period
-    return ""
 
 
 def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tuple[str, str, str, str, List[str]]]:
