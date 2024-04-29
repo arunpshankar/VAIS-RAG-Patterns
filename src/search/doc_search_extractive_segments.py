@@ -1,7 +1,8 @@
-
+from src.utils.validate import extract_and_validate_entities
 from src.search.utils import extract_filename
+
+from src.search.utils import filtered_search
 from src.config.logging import logger 
-from src.search.utils import search
 from typing import Dict 
 from typing import Any
     
@@ -33,7 +34,9 @@ def get_top_extractive_segments(results: Dict[str, Any], n: int) -> str:
 if __name__ == "__main__":
     query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
     data_store_id = "quarterly-reports"
-
-    results = search(query, data_store_id)
-    answers = get_top_extractive_segments(results, 2)
-    print(answers)
+    # company = "amazon"
+    # time_period = "Q4 2022"
+    company, time_period = extract_and_validate_entities(query)
+    results = filtered_search(query, company, time_period, data_store_id)
+    segment = get_top_extractive_segments(results, 1)
+    print(segment)

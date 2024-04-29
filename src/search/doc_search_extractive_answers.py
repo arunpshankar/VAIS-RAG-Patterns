@@ -1,3 +1,4 @@
+from src.utils.validate import extract_and_validate_entities
 from src.search.utils import extract_filename
 from src.search.utils import filtered_search
 from src.config.logging import logger 
@@ -34,7 +35,7 @@ if __name__ == "__main__":
     data_store_id = "quarterly-reports"
     # company = "amazon"
     # time_period = "Q4 2022"
-
-    results = filtered_search(query, data_store_id)
-    answers = get_top_extractive_answers(results, 2)
-    print(answers)
+    company, time_period = extract_and_validate_entities(query)
+    results = filtered_search(query, company, time_period, data_store_id)
+    extractive_ans = get_top_extractive_answers(results, 1)
+    print(extractive_ans)
