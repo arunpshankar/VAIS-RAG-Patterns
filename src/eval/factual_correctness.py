@@ -1,5 +1,4 @@
-from src.config.logging import logger  
-from src.config.setup import config  
+from src.config.logging import logger    
 from src.generate.llm import LLM  
 from typing import Dict
 
@@ -50,5 +49,7 @@ if __name__ == '__main__':
     """
 
     response = evaluate_factual_correctness(expected_ans, generated_ans)
-    print(response) 
+    predicted_class, rationale = response["class"], response["rationale"]
+    logger.info(f'Predicted Class = {predicted_class}')
+    logger.info(f'Rationale = {rationale}')
 
