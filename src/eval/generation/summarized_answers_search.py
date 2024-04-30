@@ -15,7 +15,6 @@ def load_data(input_file: str) -> pd.DataFrame:
     """Load data from a CSV file, keeping only the first 5 rows."""
     try:
         df = pd.read_csv(input_file)
-        df = df.head(10)
         logger.info("Data loaded successfully.")
         return df
     except Exception as e:
