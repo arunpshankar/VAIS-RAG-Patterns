@@ -211,5 +211,5 @@ def process_and_save_data(file_path, output_dir, output_filename):
 
 
 if __name__ == "__main__":
-    process_and_save_data('./data/eval/01.csv', './data/eval/retrieval', '01_metrics.csv')
-    process_and_save_data('./data/eval/02.csv', './data/eval/retrieval', '02_metrics.csv')
+    process_and_save_data('./data/eval/retrieval/doc_search_results.csv', './data/eval/retrieval', 'doc_search_results_metrics.csv')
+    process_and_save_data('./data/eval/retrieval/doc_search_with_filters_results.csv', './data/eval/retrieval', 'doc_search_with_filters_results_metrics.csv')
