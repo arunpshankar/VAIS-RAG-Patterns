@@ -28,7 +28,7 @@ def get_filtered_summarized_answer(query: str, company: str, time_period: str, d
     
 
 if __name__ == "__main__":
-    query = "What were Amazon's basic earnings per share (EPS) for Q4 2021, Q4 2022, the full year of 2021, and the full year of 2022?"
+    query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
     data_store_id = "quarterly-reports"
     # company = "amazon"
     # time_period = "Q4 2022"

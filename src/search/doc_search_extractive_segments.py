@@ -1,6 +1,6 @@
 from src.utils.validate import extract_and_validate_entities
 from src.search.utils import extract_filename
-
+from src.generate.qa import generate_answer
 from src.search.utils import filtered_search
 from src.config.logging import logger 
 from typing import Dict 
@@ -23,7 +23,7 @@ def get_top_extractive_segments(results: Dict[str, Any], n: int) -> str:
         # Retrieve up to N extractive answers if they exist
         for info in results.get('match_info', [])[:n]:
             source = extract_filename(info['link'])
-            extractive_segments.append(info.get('extractive_segments', 'No answer found')[0] + f' Ref:[{source}]')
+            extractive_segments.append('\n\n'.join(info.get('extractive_segments', 'No answer found')) + f' Ref:[{source}]')
     except Exception as e:
         # Handle any errors that might occur
         logger.error(f"Error retrieving extractive answers: {e}")
@@ -38,5 +38,7 @@ if __name__ == "__main__":
     # time_period = "Q4 2022"
     company, time_period = extract_and_validate_entities(query)
     results = filtered_search(query, company, time_period, data_store_id)
-    segment = get_top_extractive_segments(results, 1)
-    print(segment)
+    segments = get_top_extractive_segments(results, 1)
+    logger.info(f'Segments: {segments}')
+    ans = generate_answer(query, segments)
+    logger.info(f'Ans: {ans}')

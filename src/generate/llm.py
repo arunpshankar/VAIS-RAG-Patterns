@@ -43,7 +43,7 @@ class LLM:
                 temperature=0.0,
                 top_k=1.0,
                 top_p=0.0,
-                max_output_tokens=512,
+                max_output_tokens=4096,
                 verbose=True, 
                 safety_settings=safety_settings)
             logger.info("Chat model loaded successfully.")
