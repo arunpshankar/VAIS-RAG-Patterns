@@ -1,6 +1,7 @@
 from src.utils.validate import extract_and_validate_entities
 from src.search.utils import extract_filename
 from src.search.utils import filtered_search
+from src.generate.qa import generate_answer
 from src.config.logging import logger 
 from typing import Dict 
 from typing import Any
@@ -37,5 +38,7 @@ if __name__ == "__main__":
     # time_period = "Q4 2022"
     company, time_period = extract_and_validate_entities(query)
     results = filtered_search(query, company, time_period, data_store_id)
-    extractive_ans = get_top_extractive_answers(results, 1)
-    print(extractive_ans)
+    extractive_answers = get_top_extractive_answers(results, 1)
+    logger.info(f'Extractive answers: {extractive_answers}')
+    ans = generate_answer(query, extractive_answers)
+    logger.info(f'Ans: {ans}')

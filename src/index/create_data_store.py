@@ -34,9 +34,9 @@ def create_data_store(data_store_display_name: str, data_store_id: str) -> Dict[
         'industryVertical': IndustryVertical.GENERIC,
         'solutionTypes': SolutionType.SOLUTION_TYPE_SEARCH,
         'contentConfig': DataStore.ContentConfig.CONTENT_REQUIRED,
-        "documentProcessingConfig": {
-            "defaultParsingConfig": {
-                "layoutParsingConfig": {}
+        'documentProcessingConfig': {
+            'defaultParsingConfig': {
+                'layoutParsingConfig': {}
             }
         }  
     }
