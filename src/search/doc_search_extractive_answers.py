@@ -22,7 +22,7 @@ def get_top_extractive_answers(results: Dict[str, Any], n: int) -> str:
         # Retrieve up to N extractive answers if they exist
         for info in results.get('match_info', [])[:n]:
             source = extract_filename(info['link'])
-            extractive_answers.append(info.get('extractive_answers', 'No answer found')[0] + f' Ref:[{source}]')
+            extractive_answers.append('\n\n'.join(info.get('extractive_answers', 'No answer found')) + f' Ref:[{source}]')
     except Exception as e:
         # Handle any errors that might occur
         logger.error(f"Error retrieving extractive answers: {e}")

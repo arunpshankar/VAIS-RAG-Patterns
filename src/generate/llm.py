@@ -1,9 +1,20 @@
-from langchain.prompts.chat import HumanMessagePromptTemplate, ChatPromptTemplate
+from langchain.prompts.chat import HumanMessagePromptTemplate
+from langchain_google_vertexai import HarmBlockThreshold 
+from langchain.prompts.chat import ChatPromptTemplate
+from langchain_google_vertexai import HarmCategory
 from langchain_google_vertexai import ChatVertexAI
 from src.config.logging import logger
 from src.config.setup import config
 from typing import Optional
 
+
+safety_settings = {
+    HarmCategory.HARM_CATEGORY_UNSPECIFIED: HarmBlockThreshold.BLOCK_NONE,
+    HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+    HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+    HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+    HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE
+}
 
 class LLM:
     """
@@ -32,8 +43,9 @@ class LLM:
                 temperature=0.0,
                 top_k=1.0,
                 top_p=0.0,
-                max_output_tokens=16,
-                verbose=True)
+                max_output_tokens=512,
+                verbose=True, 
+                safety_settings=safety_settings)
             logger.info("Chat model loaded successfully.")
             return model
         except Exception as e:

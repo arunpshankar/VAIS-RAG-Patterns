@@ -20,7 +20,12 @@ def extract_entities(query: str) -> Dict[str, str]:
     
     def extract_entity(task: str, query: str) -> str:
         return llm.predict(task=task, query=query)
-    prompt = """Given the query below, extract the company name from it. The company name can be either `Microsoft`, `Alphabet`, or `Amazon`. If company `LinkedIn` is found, translate to `Microsoft`."""
+    prompt = """Given the query below, extract the company name from it.
+The company name can be either `Microsoft`, `Alphabet`, or `Amazon`. 
+
+If company name is `LinkedIn`, translate to `Microsoft`. 
+IMPORTANT: The extracted company name must be a single word ONLY without any breaklines or punctuations or extra whitespaces.
+"""
     extracted_entities['company'] = extract_entity(prompt, query)
     prompt = """Given a query, extract the specific time period from it. A valid time period should be in the form 'Q1 2021' only. 
 Examples of invalid formats include: 
