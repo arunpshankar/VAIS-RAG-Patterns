@@ -1,4 +1,4 @@
-from src.search.doc_search_with_filters import search
+from src.search.doc_search_with_filters import filtered_search
 from src.utils.validate import validate_time_period
 from src.utils.validate import validate_company
 from src.generate.ner import extract_entities
@@ -9,6 +9,7 @@ from typing import Tuple
 from typing import List
 from tqdm import tqdm
 import pandas as pd
+import time 
 
 
 def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tuple[str, str, str, str, List[str]]]:
@@ -35,7 +36,7 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
         time_period = validate_time_period(time_period)
         
         try:
-            results = search(question, company, time_period, data_store_id)
+            results = filtered_search(question, company, time_period, data_store_id)
             summarized_ans = results['summarized_answer']
             match_info = results['match_info']
             matched_docs = []
@@ -46,6 +47,7 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
                 matched_doc = f'{company}-{time_period}'
                 matched_docs.append(matched_doc)
             eval_results.append((question, expected_ans, summarized_ans, expected_doc, matched_docs))
+            time.sleep(3)
         except Exception as e:
             logger.error(f"Error processing question '{question}': {e}")
             eval_results.append((question, expected_ans, "Error in processing", expected_doc, []))
@@ -55,7 +57,7 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
 def main():
     data_store_id = "quarterly-reports"
     file_path = './data/eval/ground_truth.csv'
-    output_file = './data/eval/02.csv'
+    output_file = './data/eval/retrieval/doc_search_with_filters_results.csv'
     
     data = load_data(file_path)
     eval_results = evaluate_document_search(data, data_store_id)

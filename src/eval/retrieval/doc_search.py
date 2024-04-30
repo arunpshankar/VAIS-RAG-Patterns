@@ -1,11 +1,12 @@
-from src.search.doc_search import search
 from src.eval.utils import save_results
 from src.config.logging import logger
 from src.eval.utils import load_data
+from src.search.utils import search
 from typing import Tuple
 from typing import List
 from tqdm import tqdm
 import pandas as pd
+import time
 
 
 def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tuple[str, str, str, str, List[str]]]:
@@ -30,6 +31,7 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
             match_info = results['match_info']
             matched_docs = [f"{info['company']}-{info['time_period'].lower()}" for info in match_info]
             eval_results.append((question, expected_ans, summarized_ans, expected_doc, matched_docs))
+            time.sleep(3)
         except Exception as e:
             logger.error(f"Error processing question '{question}': {e}")
             eval_results.append((question, expected_ans, "Error in processing", expected_doc, []))
@@ -39,7 +41,7 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
 def main():
     data_store_id = "quarterly-reports"
     file_path = './data/eval/ground_truth.csv'
-    output_file = './data/eval/01.csv'
+    output_file = './data/eval/retrieval/doc_search_results.csv'
     
     data = load_data(file_path)
     eval_results = evaluate_document_search(data, data_store_id)
