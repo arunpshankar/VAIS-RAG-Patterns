@@ -1,0 +1,4 @@
+Accuracy: 0.45
+partially correct: 70.00%
+wrong: 20.00%
+fully correct: 10.00%
