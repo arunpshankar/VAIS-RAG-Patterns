@@ -95,40 +95,40 @@ class LLM:
                 * rationale (str): An explanation for the classification, highlighting 
                                 differences and potential factual inaccuracies.
         """
-        try:
-            # Structured Output Setup
-            response_schemas = [
-                ResponseSchema(name="class", description="Whether the predicted answer is 'correct', 'incorrect' or 'partially correct."),
-                ResponseSchema(name="rationale", description="Explanation for why the answer is incorrect or partially correct , with specific details."),
-            ]
-            output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
-            format_instructions = output_parser.get_format_instructions()
-            
-            # Prompt Template
-            template = """
-            Task: {task}
+        attempt_count = 0
+        while attempt_count < 5:
+            try:
+                # Initialize response schemas, prompt template, etc.
+                response_schemas = [
+                    ResponseSchema(name="class", description="Whether the predicted answer is 'correct', 'incorrect' or 'partially correct."),
+                    ResponseSchema(name="rationale", description="Explanation for why the answer is incorrect or partially correct, with specific details."),
+                ]
+                output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
+                format_instructions = output_parser.get_format_instructions()
+                
+                template = """
+                Task: {task}
 
-            Expected Answer: {expected_ans}
+                Expected Answer: {expected_ans}
 
-            Predicted Answer: {predicted_ans}
+                Predicted Answer: {predicted_ans}
 
-            Compare the predicted answer with the expected answer. Determine if the predicted answer is factually correct.
+                Compare the predicted answer with the expected answer. Determine if the predicted answer is factually correct.
 
-            Provide your response in the following format:
+                Provide your response in the following format:
 
-            {format_instructions}
-            """
-
-            prompt = PromptTemplate(
-                input_variables=["task", "expected_ans", "predicted_ans"],
-                template=template,
-                partial_variables={"format_instructions": format_instructions},
-            )
-
-            prompt_msg = prompt.format_prompt(task=task, expected_ans=expected_ans, predicted_ans=predicted_ans).to_messages()
-            response = self.model.invoke(prompt_msg)
-            result_dict = output_parser.parse(response.content)
-            return result_dict
-        except Exception as e:
-            logger.error(f"Error during comparison: {e}")
-            return {"class": "error", "rationale": "An error occurred during the comparison process."}
+                {format_instructions}
+                """
+                prompt = PromptTemplate(
+                    input_variables=["task", "expected_ans", "predicted_ans"],
+                    template=template,
+                    partial_variables={"format_instructions": format_instructions},
+                )
+                prompt_msg = prompt.format_prompt(task=task, expected_ans=expected_ans, predicted_ans=predicted_ans).to_messages()
+                response = self.model.invoke(prompt_msg)
+                result_dict = output_parser.parse(response.content)
+                return result_dict  # Exit loop on successful execution
+            except Exception as e:
+                logger.error(f"Attempt {attempt_count + 1} failed with error: {e}")
+                attempt_count += 1  # Increment attempt count after failure
+        return {"class": "error", "rationale": "Failed after 5 attempts due to repeated errors."}

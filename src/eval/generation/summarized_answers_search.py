@@ -4,22 +4,12 @@ from src.eval.semantic_similarity import calculate_cosine_similarity
 from src.search.doc_search import get_summarized_answer
 from src.eval.semantic_similarity import embed_text
 from src.config.logging import logger
+from src.eval.utils import load_data
 from typing import Tuple
 from tqdm import tqdm
 import pandas as pd
 import numpy as np
 import time
-
-
-def load_data(input_file: str) -> pd.DataFrame:
-    """Load data from a CSV file, keeping only the first 5 rows."""
-    try:
-        df = pd.read_csv(input_file)
-        logger.info("Data loaded successfully.")
-        return df
-    except Exception as e:
-        logger.error(f"Failed to load data: {e}")
-        raise
 
 
 def save_results(results: pd.DataFrame, output_file: str):
