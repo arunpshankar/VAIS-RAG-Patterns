@@ -4,23 +4,12 @@ from src.eval.semantic_similarity import calculate_cosine_similarity
 from src.eval.utils import save_generation_eval_results
 from src.search.doc_search import get_summarized_answer
 from src.eval.semantic_similarity import embed_text
+from src.eval.utils import compute_accuracy
 from src.config.logging import logger
 from src.eval.utils import load_data
-from typing import Tuple
 from tqdm import tqdm
 import pandas as pd
-import numpy as np
 import time
-
-
-def compute_accuracy(results: pd.DataFrame) -> Tuple[float, dict]:
-    """Compute the overall accuracy and the breakdown by class type."""
-    score_mapping = {'fully correct': 1, 'partially correct': 0.5, 'wrong': 0}
-    results['score'] = results['class'].map(score_mapping)
-    accuracy = np.mean(results['score'])
-    breakdown = results['class'].value_counts(normalize=True).to_dict()
-    logger.info("Accuracy computed.")
-    return accuracy, breakdown
 
 
 def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.DataFrame:

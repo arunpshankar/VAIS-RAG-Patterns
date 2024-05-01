@@ -2,6 +2,7 @@ from src.config.logging import logger
 from typing import Tuple
 from typing import List 
 import pandas as pd 
+import numpy as np
 
 
 def load_data(file_path: str) -> pd.DataFrame:
@@ -37,7 +38,6 @@ def save_retrieval_eval_results(eval_results: List[Tuple[str, str, str, str, Lis
         logger.error(f"Failed to save results to {output_file}: {e}")
 
 
-
 def save_generation_eval_results(results: pd.DataFrame, output_file: str):
     """
     Save the evaluation results for generation to a CSV file without index.
@@ -48,3 +48,14 @@ def save_generation_eval_results(results: pd.DataFrame, output_file: str):
     except Exception as e:
         logger.error(f"Failed to save results: {e}")
         raise
+
+
+def compute_accuracy(results: pd.DataFrame) -> Tuple[float, dict]:
+    """Compute the overall accuracy and the breakdown by class type."""
+    score_mapping = {'fully correct': 1, 'partially correct': 0.5, 'wrong': 0}
+    results['score'] = results['class'].map(score_mapping)
+    accuracy = np.mean(results['score'])
+    breakdown = results['class'].value_counts(normalize=True).to_dict()
+    logger.info("Accuracy computed.")
+    return accuracy, breakdown
+
