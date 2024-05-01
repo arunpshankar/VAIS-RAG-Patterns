@@ -1,6 +1,7 @@
 from src.config.logging import logger
 from typing import Tuple
 from typing import List 
+from typing import Dict 
 import pandas as pd 
 import numpy as np
 
@@ -36,11 +37,16 @@ def save_retrieval_eval_results(eval_results: List[Tuple[str, str, str, str, Lis
         logger.info(f"Results saved successfully to {output_file}")
     except Exception as e:
         logger.error(f"Failed to save results to {output_file}: {e}")
+        raise 
 
 
-def save_generation_eval_results(results: pd.DataFrame, output_file: str):
+def save_generation_eval_results(results: pd.DataFrame, output_file: str) -> None:
     """
-    Save the evaluation results for generation to a CSV file without index.
+    Save the evaluation results stored in a DataFrame to a CSV file.
+
+    Parameters:
+    results (pd.DataFrame): A pandas DataFrame containing the evaluation results.
+    output_file (str): The path string where the CSV file will be saved.
     """
     try:
         results.to_csv(output_file, index=False)
@@ -50,12 +56,34 @@ def save_generation_eval_results(results: pd.DataFrame, output_file: str):
         raise
 
 
-def compute_accuracy(results: pd.DataFrame) -> Tuple[float, dict]:
-    """Compute the overall accuracy and the breakdown by class type."""
-    score_mapping = {'fully correct': 1, 'partially correct': 0.5, 'wrong': 0}
-    results['score'] = results['class'].map(score_mapping)
-    accuracy = np.mean(results['score'])
-    breakdown = results['class'].value_counts(normalize=True).to_dict()
-    logger.info("Accuracy computed.")
-    return accuracy, breakdown
+def compute_accuracy(results: pd.DataFrame) -> Tuple[float, Dict[str, float]]:
+    """
+    Compute the overall accuracy of evaluation results and the proportion of each class type.
+    
+    Args:
+    results (pd.DataFrame): A DataFrame with a column 'class' that contains the classification results
+        which could be 'fully correct', 'partially correct', or 'wrong'.
+
+    Returns:
+    Tuple[float, Dict[str, float]]: A tuple containing the overall accuracy as a float and a dictionary
+        with the proportion of each class type.
+
+    Raises:
+    ValueError: If the required 'class' column is missing or if there are no valid entries to compute accuracy.
+    """
+    try:
+        score_mapping = {'fully correct': 1, 'partially correct': 0.5, 'wrong': 0}
+        results['score'] = results['class'].map(score_mapping)
+        accuracy = np.mean(results['score'])
+        breakdown = results['class'].value_counts(normalize=True).to_dict()
+        logger.info("Accuracy computed.")
+        if pd.isna(accuracy):
+            raise ValueError("No valid entries to compute accuracy.")
+        return accuracy, breakdown
+    except KeyError:
+        logger.error("The DataFrame lacks the required 'class' column.")
+        raise ValueError("The DataFrame lacks the required 'class' column.")
+    except Exception as e:
+        logger.error(f"An error occurred while computing accuracy: {e}")
+        raise
 
