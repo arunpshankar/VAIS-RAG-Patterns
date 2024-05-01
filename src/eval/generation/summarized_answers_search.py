@@ -42,7 +42,7 @@ def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.Dat
         try:
             predicted_answer = get_summarized_answer(question, data_store_id)
             similarity = calculate_cosine_similarity(embed_text([expected_answer])[0], embed_text([predicted_answer])[0])
-            factual_evaluation = evaluate_factual_correctness(predicted_answer, expected_answer)
+            factual_evaluation = evaluate_factual_correctness(expected_answer, predicted_answer)
             
             result = {
                 'question': question,
