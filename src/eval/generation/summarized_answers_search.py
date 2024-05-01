@@ -1,6 +1,7 @@
 
 from src.eval.factual_correctness import evaluate_factual_correctness
 from src.eval.semantic_similarity import calculate_cosine_similarity
+from src.eval.utils import save_generation_eval_results
 from src.search.doc_search import get_summarized_answer
 from src.eval.semantic_similarity import embed_text
 from src.config.logging import logger
@@ -10,16 +11,6 @@ from tqdm import tqdm
 import pandas as pd
 import numpy as np
 import time
-
-
-def save_results(results: pd.DataFrame, output_file: str):
-    """Save results to a CSV file without index."""
-    try:
-        results.to_csv(output_file, index=False)
-        logger.info("Results saved successfully.")
-    except Exception as e:
-        logger.error(f"Failed to save results: {e}")
-        raise
 
 
 def compute_accuracy(results: pd.DataFrame) -> Tuple[float, dict]:
@@ -42,7 +33,7 @@ def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.Dat
         try:
             predicted_answer = get_summarized_answer(question, data_store_id)
             similarity = calculate_cosine_similarity(embed_text([expected_answer])[0], embed_text([predicted_answer])[0])
-            factual_evaluation = evaluate_factual_correctness(expected_answer, predicted_answer)
+            factual_evaluation = evaluate_factual_correctness(question, expected_answer, predicted_answer)
             
             result = {
                 'question': question,
@@ -70,7 +61,7 @@ def main():
     try:
         data = load_data(input_file)
         eval_results = evaluate_summarized_answer(data, data_store_id)
-        save_results(eval_results, output_file)
+        save_generation_eval_results(eval_results, output_file)
         
         accuracy, breakdown = compute_accuracy(eval_results)
         with open('./data/eval/generation/summarized_answers_results_accuracy.txt', 'w') as f:

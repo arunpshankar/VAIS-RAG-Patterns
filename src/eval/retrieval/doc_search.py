@@ -1,4 +1,4 @@
-from src.eval.utils import save_results
+from src.eval.utils import save_retrieval_eval_results
 from src.config.logging import logger
 from src.eval.utils import load_data
 from src.search.utils import search
@@ -45,7 +45,7 @@ def main():
     
     data = load_data(file_path)
     eval_results = evaluate_document_search(data, data_store_id)
-    save_results(eval_results, output_file)
+    save_retrieval_eval_results(eval_results, output_file)
 
 
 if __name__ == "__main__":

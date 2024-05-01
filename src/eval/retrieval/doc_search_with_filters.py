@@ -1,8 +1,8 @@
 from src.search.doc_search_with_filters import filtered_search
+from src.eval.utils import save_retrieval_eval_results
 from src.utils.validate import validate_time_period
 from src.utils.validate import validate_company
 from src.generate.ner import extract_entities
-from src.eval.utils import save_results
 from src.config.logging import logger
 from src.eval.utils import load_data
 from typing import Tuple
@@ -61,7 +61,7 @@ def main():
     
     data = load_data(file_path)
     eval_results = evaluate_document_search(data, data_store_id)
-    save_results(eval_results, output_file)
+    save_retrieval_eval_results(eval_results, output_file)
 
 
 if __name__ == "__main__":

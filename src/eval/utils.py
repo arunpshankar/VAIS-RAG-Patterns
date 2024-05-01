@@ -21,9 +21,9 @@ def load_data(file_path: str) -> pd.DataFrame:
         raise
 
 
-def save_results(eval_results: List[Tuple[str, str, str, str, List[str]]], output_file: str) -> None:
+def save_retrieval_eval_results(eval_results: List[Tuple[str, str, str, str, List[str]]], output_file: str) -> None:
     """
-    Save the evaluation results to a CSV file.
+    Save the evaluation results for retrieval to a CSV file.
 
     Parameters:
     eval_results (List[Tuple[str, str, str, str, List[str]]]): The evaluation results.
@@ -35,3 +35,16 @@ def save_results(eval_results: List[Tuple[str, str, str, str, List[str]]], outpu
         logger.info(f"Results saved successfully to {output_file}")
     except Exception as e:
         logger.error(f"Failed to save results to {output_file}: {e}")
+
+
+
+def save_generation_eval_results(results: pd.DataFrame, output_file: str):
+    """
+    Save the evaluation results for generation to a CSV file without index.
+    """
+    try:
+        results.to_csv(output_file, index=False)
+        logger.info("Results saved successfully.")
+    except Exception as e:
+        logger.error(f"Failed to save results: {e}")
+        raise
