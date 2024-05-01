@@ -18,7 +18,13 @@ def evaluate_factual_correctness(expected_ans: str, generated_ans: str) -> Dict[
         A dictionary containing the classification ("fully correct", "partially correct", or "wrong") and the rationale.
     """
 
-    task = """Given the expected and generated answers as shown below, compare the answers and classify them into one of the three classes - `fully correct`, `partially correct`, or `wrong`. If the answer is partially correct or wrong, provide the rationale. The output should be two things - class and rationale as a Python dictionary. For class, it should be one word ONLY (which is the expected class), and for rationale, provide the reason succinctly, especially focusing on numbers and areas where the generated answer failed to match the expected. Do NOT focus on semantics. If the units are different, normalize them before comparing."""
+    task = """Given the expected and generated answers as shown below, compare the answers and classify them into one of the three classes - `fully correct`, `partially correct`, or `wrong`. 
+    If the answer is partially correct or wrong, provide the rationale. 
+    The output should be two things - class and rationale as a Python dictionary. 
+    For class, it should be one word ONLY (which is the expected class), and for rationale, provide the reason succinctly, especially ONLY focusing on numbers and facts.
+    DO NOT focus on the semantics between the expected and predicted answers.
+    IMPORANT: Compare only numbers and facts.
+    If the units are different, normalize them before comparing."""
 
     try:
         response = llm.compare(task, expected_ans, generated_ans)

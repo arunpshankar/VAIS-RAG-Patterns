@@ -39,7 +39,7 @@ def calculate_cosine_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
         The cosine similarity between the two vectors.
     """
     try:
-        return cosine_similarity([vec1], [vec2])[0][0]  # Directly compute without extra conversion
+        return round(cosine_similarity([vec1], [vec2])[0][0], 4)  # Directly compute without extra conversion
     except Exception as e:
         logger.error(f"Error calculating cosine similarity: {e}")
         raise  # Ensure error propagation
