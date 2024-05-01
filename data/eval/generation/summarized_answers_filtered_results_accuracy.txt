@@ -1,3 +1,5 @@
-Accuracy: 0.35
-partially correct: 70.00%
-wrong: 30.00%
+Accuracy: 0.50
+partially correct: 87.00%
+wrong: 6.00%
+fully correct: 6.00%
+incorrect: 1.00%
