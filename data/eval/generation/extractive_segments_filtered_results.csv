@@ -1,0 +1,58 @@
+question,expected_answer,predicted_answer,semantic_similarity,class,rationale
+"What was Google's operating income (in billions) at the end of March 2021, and how did it compare to the same period of the previous year?",Google's operating income was $16.437 billion in Q1 2021. This was an increase from $7.977 billion in Q1 2020.,"## Google's Operating Income in Q1 2021: A Year-over-Year Comparison
+
+At the end of March 2021, Google's operating income was **$16.437 billion**. This represents a significant increase compared to the same period in the previous year, where the operating income was **$7.977 billion**. This translates to a **105.8%** year-over-year growth. 
+
+This substantial increase can be attributed to several factors, including:
+
+* **Elevated consumer activity online:** The pandemic led to increased reliance on online services, boosting Google's advertising revenue.
+* **Broad-based growth in advertiser revenue:** Businesses across various sectors increased their online advertising spending, further contributing to Google's revenue growth.
+* **Strong performance of Google Cloud:** Google Cloud witnessed significant growth, with revenues reaching $4.047 billion in Q1 2021, compared to $2.777 billion in the same period of the previous year.
+
+It's important to note that these figures represent unaudited results. 
+",0.906,correct,Both the expected and predicted answers correctly state that Google's operating income in Q1 2021 was $16.437 billion. They also accurately report the year-over-year increase of $8.46 billion and the percentage growth of 105.8%.
+How many additional stocks did the Board of Directors of Alphabet authorize to repurchase in Q1 of 2021?,The Board of Directors of Alphabet authorized to repurchase up to an additional $50 billion of its Class C capital stock in April 2021.,The Board of Directors of Alphabet authorized the company to repurchase up to an additional $50.0 billion of its Class C capital stock in Q1 of 2021.,0.978,correct,Both answers state that the Board of Directors of Alphabet authorized the repurchase of up to $50 billion of its Class C capital stock in Q1 of 2021.
+What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?,"In Q1 of 2021, Google Cloud's operating loss was $974 million. In Q1 of 2020, Google Cloud had an operating loss of $1.73 billion.","The operating loss for Google Cloud for Q1 of 2021 was $0.974 billion, compared to an operating loss of $1.73 billion for the same period in the previous year. This represents a significant improvement in Google Cloud's financial performance.",0.9643,partially correct,"The predicted answer correctly states the operating loss for Google Cloud in Q1 2021 as $0.974 billion. However, it incorrectly states the operating loss for Q1 2020 as $1.73 billion. The actual operating loss for Q1 2020 was $1.25 billion."
+How much did Google spend on R&D (in billions) in Q1 of 2021 compared to the same period in the previous year?,"Google's Q1 2021 R&D expenditure was $7.485 billion, marking an increase from $6.82 billion in Q1 2020.","## Google's R&D Spending in Q1 2021 vs. 2020
+
+In Q1 2021, Google spent **$7.485 billion** on research and development (R&D). This represents a **9.7% increase** compared to the same period in the previous year, where R&D spending was **$6.820 billion**. 
+
+Here's a breakdown:
+
+* **Q1 2021:** $7.485 billion
+* **Q1 2020:** $6.820 billion
+* **Increase:** $0.665 billion (9.7%) 
+",0.9144,correct,"Both answers correctly state that Google's Q1 2021 R&D expenditure was $7.485 billion, an increase from $6.82 billion in Q1 2020."
+"How many Academy Award nominations did Amazon Studios receive in Q1 of 2021, setting a record for the studio? Which are the four films for which Amazon Studios received Academy Award nominations?","Amazon Studios received 12 Academy Award nominations.
+The four films are ""One Night in Miami..."", ""Borat Subsequent Moviefilm"", ""Time"", and ""Sound of Metal"".","Amazon Studios received a record 12 Academy Award nominations in Q1 of 2021. The four films for which Amazon Studios received Academy Award nominations are: One Night in Miami…, Borat Subsequent Moviefilm, Time, and Sound of Metal.",0.925,correct,"The predicted answer correctly states that Amazon Studios received 12 Academy Award nominations in Q1 of 2021 and lists the four nominated films: One Night in Miami..., Borat Subsequent Moviefilm, Time, and Sound of Metal."
+What was the increase in operating income from the first quarter of 2020 to the first quarter of 2021 for Amazon?,The operating income increased from $4.0 billion in the first quarter of 2020 to $8.9 billion in the first quarter of 2021.,"The operating income for Amazon in the first quarter of 2020 was $4.0 billion. The operating income for Amazon in the first quarter of 2021 was $8.9 billion. Therefore, the increase in operating income from the first quarter of 2020 to the first quarter of 2021 for Amazon was $4.9 billion.",0.8565,partially correct,"The predicted answer correctly identifies the operating income for Amazon in the first quarter of 2020 and 2021. However, it calculates the increase as $4.9 billion, which is incorrect. The actual increase is $8.9 billion - $4.0 billion = $4.9 billion."
+What was the revenue of Amazon Subscription Services in Q1 2021 as compared to Q4 2020?,"As of Q1 2021, Amazon's subscription services increased to 7.58 billion, a 34% rise compared to Q4 2020, which was 7.061 billion.","The provided context does not contain information about Amazon Subscription Services revenue in Q1 2021 or Q4 2020. Therefore, I cannot answer your question. 
+",0.8322,incorrect,"The predicted answer claims that the provided context does not contain information about Amazon Subscription Services revenue in Q1 2021 or Q4 2020, while the expected answer provides specific figures for these quarters (7.58 billion and 7.061 billion, respectively)."
+"What was LinkedIn's revenue increase in Q1 2021 according to Microsoft's earnings report, and what was the growth rate when adjusted for constant currency?","In the third quarter of 2021, LinkedIn's revenue increased by 25% year-over-year. When adjusted for constant currency, the growth rate was 23%.","## LinkedIn's Revenue Increase in Q1 2021
+
+According to Microsoft's Q1 2021 earnings report, LinkedIn's revenue increased by **25%** compared to the same period in the previous year. When adjusted for constant currency, the growth rate was **23%**. 
+
+Here's the breakdown:
+
+* **Reported Revenue Increase:** 25%
+* **Constant Currency Growth Rate:** 23%
+
+This information can be found in the ""Business Highlights"" section of the report, under the ""Productivity and Business Processes"" segment. 
+",0.8831,correct,Both the expected and predicted answers state that LinkedIn's revenue increased by 25% in Q1 2021 and the growth rate was 23% when adjusted for constant currency. They also mention the source of the information (Microsoft's Q1 2021 earnings report) and the specific section where it can be found.
+"What was Microsoft's diluted earnings per share according to the Q1 2021 reports, both as reported GAAP and adjusted non-GAAP?","In the third quarter of 2021, Microsoft's diluted earnings per share were reported as $2.03 according to GAAP, and $1.95 when adjusted according to non-GAAP.","## Microsoft's Diluted Earnings per Share in Q1 2021:
+
+**GAAP:** $2.03
+**Non-GAAP:** $1.95
+
+The difference is due to a $620 million net income tax benefit related to an India Supreme Court decision on withholding taxes. This benefit is not included in the non-GAAP results. 
+",0.8498,partially correct,"The predicted answer correctly identifies the GAAP and non-GAAP diluted earnings per share for Microsoft in Q1 2021. However, it does not mention the source of the information or the date of the report, which are both included in the expected answer."
+"What was the amount that Microsoft returned to shareholders through share repurchases and dividends in the (Q1 2021) third quarter of fiscal year 2021? How does this compare, in percentage terms, to the same quarter of the previous fiscal year?","In the third quarter of fiscal year 2021, Microsoft returned $10.0 billion to shareholders through share repurchases and dividends. This marked a 1% increase compared to the third quarter of fiscal year 2020.","## Microsoft Shareholder Returns in Q1 2021
+
+The provided context focuses on Microsoft's first quarter results for fiscal year 2022, which ended September 30, 2021. Therefore, it doesn't contain information about the third quarter of fiscal year 2021. 
+
+To answer your question accurately, I need access to Microsoft's financial reports for the third quarter of fiscal year 2021, which ended March 31, 2021. 
+
+Once I have that information, I can provide you with the amount Microsoft returned to shareholders through share repurchases and dividends in Q3 2021 and compare it to the same quarter of the previous fiscal year (Q3 2020). 
+
+Please provide the relevant financial report or direct me to where I can find it, and I'll be happy to assist you further. 
+",0.8333,partially correct,"The predicted answer acknowledges the need for specific financial information to answer the question accurately. However, it does not provide any factual information related to the amount Microsoft returned to shareholders through share repurchases and dividends in Q3 2021 or compare it to the same quarter of the previous fiscal year (Q3 2020)."

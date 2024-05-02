@@ -72,7 +72,7 @@ def compute_accuracy(results: pd.DataFrame) -> Tuple[float, Dict[str, float]]:
     ValueError: If the required 'class' column is missing or if there are no valid entries to compute accuracy.
     """
     try:
-        score_mapping = {'fully correct': 1, 'partially correct': 0.5, 'wrong': 0}
+        score_mapping = {'correct': 1, 'partially correct': 0.5, 'incorrect': 0}
         results['score'] = results['class'].map(score_mapping)
         accuracy = np.mean(results['score'])
         breakdown = results['class'].value_counts(normalize=True).to_dict()
