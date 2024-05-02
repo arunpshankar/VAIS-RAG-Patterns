@@ -1,6 +1,4 @@
-# RAG Automation Architectural Blueprints
-
-Advanced Document Understanding using Vertex AI Search
+# Architectural Blueprints for RAG Automation: Advanced Document Understanding using Vertex AI Search
 
 <div align="center">
     <img src="./img/blog-9.png" alt="Document Understanding using Vertex AI Search" width="500" height="500"/>
