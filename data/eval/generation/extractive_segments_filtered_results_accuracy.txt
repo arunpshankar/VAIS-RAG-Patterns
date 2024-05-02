@@ -1,2 +1,0 @@
-Accuracy: 0.50
-partially correct: 100.00%

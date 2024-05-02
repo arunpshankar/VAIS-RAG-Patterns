@@ -1,3 +1,0 @@
-Accuracy: 0.55
-partially correct: 90.00%
-fully correct: 10.00%
