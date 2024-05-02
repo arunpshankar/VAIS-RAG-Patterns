@@ -57,7 +57,6 @@ def main():
 
     try:
         data = load_data(input_file)
-        data = data.head(10)
         eval_results = evaluate_summarized_answer(data, data_store_id)
         save_generation_eval_results(eval_results, output_file)
         

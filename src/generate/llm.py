@@ -92,7 +92,7 @@ class LLM:
 
         Returns:
             dict: A dictionary with the following fields:
-                * class (str): "correct", "incorrect" or "Partially Correct" based on the comparison.
+                * class (str): "correct", "incorrect" or "partially correct" based on the comparison.
                 * rationale (str): An explanation for the classification, highlighting 
                                 differences and potential factual inaccuracies.
         """

@@ -14,8 +14,6 @@ import pandas as pd
 import time
 
 
-
-
 def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.DataFrame:
     """Evaluate answers by comparing predicted to expected using semantic similarity and factual correctness."""
     results = []
@@ -49,14 +47,15 @@ def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.Dat
 
 
 def main():
-    """Main function to execute the evaluation process."""
+    """
+    Main function to execute the evaluation process.
+    """
     input_file = './data/eval/ground_truth.csv'
     output_file = './data/eval/generation/extractive_answers_filtered_results.csv'
     data_store_id = "quarterly-reports"
 
     try:
         data = load_data(input_file)
-        data = data.head(10)
         eval_results = evaluate_summarized_answer(data, data_store_id)
         save_generation_eval_results(eval_results, output_file)
         
