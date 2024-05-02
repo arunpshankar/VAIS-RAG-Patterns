@@ -14,7 +14,7 @@ import pandas as pd
 import time
 
 
-REQUEST_INTERVAL = 3  # 3 seconds 
+REQUEST_INTERVAL = 5  # 5 seconds 
 
 def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.DataFrame:
     """
