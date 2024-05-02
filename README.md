@@ -3,7 +3,7 @@
 Advanced Document Understanding using Vertex AI Search
 
 <div align="center">
-    <img src="./img/rag-patterns-cover.png" alt="RAG Patterns Cover" width="500" height="500"/>
+    <img src="./img/blog-9.png" alt="Document Understanding using Vertex AI Search" width="500" height="500"/>
 </div>
 
 ## Setup Instructions
