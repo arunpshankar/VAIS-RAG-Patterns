@@ -15,7 +15,7 @@ import pandas as pd
 import time
 
 
-REQUEST_INTERVAL = 5  # 5 seconds 
+REQUEST_INTERVAL = 3  # 3 seconds 
 
 def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.DataFrame:
     """
@@ -61,7 +61,6 @@ def run():
 
     try:
         data = load_data(input_file)
-        data = data.head(10)
         eval_results = evaluate_summarized_answer(data, data_store_id)
         save_generation_eval_results(eval_results, output_file)
         
