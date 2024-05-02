@@ -38,7 +38,7 @@ def evaluate_document_search(data: pd.DataFrame, data_store_id: str) -> List[Tup
     return eval_results
 
 
-def main():
+def run():
     data_store_id = "quarterly-reports"
     file_path = './data/eval/ground_truth.csv'
     output_file = './data/eval/retrieval/doc_search_results.csv'
@@ -49,4 +49,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run()

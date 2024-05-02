@@ -15,10 +15,12 @@ import pandas as pd
 import time
 
 
-
+REQUEST_INTERVAL = 3  # 3 seconds 
 
 def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.DataFrame:
-    """Evaluate answers by comparing predicted to expected using semantic similarity and factual correctness."""
+    """
+    Evaluate answers by comparing predicted to expected using semantic similarity and factual correctness.
+    """
     results = []
     for _, row in tqdm(data.iterrows(), total=data.shape[0]):
         question = row['question']
@@ -41,7 +43,7 @@ def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.Dat
                 'rationale': factual_evaluation['rationale']
             }
             results.append(result)
-            time.sleep(3)
+            time.sleep(REQUEST_INTERVAL)
         except Exception as e:
             logger.error(f"Error processing question {question}: {e}")
             continue
@@ -49,8 +51,10 @@ def evaluate_summarized_answer(data: pd.DataFrame, data_store_id: str) -> pd.Dat
     return pd.DataFrame(results)
 
 
-def main():
-    """Main function to execute the evaluation process."""
+def run():
+    """
+    Main function to execute the evaluation process.
+    """
     input_file = './data/eval/ground_truth.csv'
     output_file = './data/eval/generation/extractive_segments_filtered_results.csv'
     data_store_id = "quarterly-reports"
@@ -71,4 +75,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run()

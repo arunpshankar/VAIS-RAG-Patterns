@@ -1,4 +1,3 @@
-from src.config.logging import logger
 from src.generate.llm import LLM
 
 

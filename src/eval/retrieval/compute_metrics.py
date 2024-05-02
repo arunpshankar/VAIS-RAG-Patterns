@@ -202,12 +202,29 @@ def save_data_to_csv(data: pd.DataFrame, directory: str, filename: str) -> None:
         logger.error(f"Error saving data to CSV: {e}", exc_info=True)
 
 
-def process_and_save_data(file_path, output_dir, output_filename):
-    data = pd.read_csv(file_path)
-    processed_data = process_data_frame(data)
-    final_data = append_averages_to_df(processed_data)
-    save_data_to_csv(final_data, output_dir, output_filename)
-    logger.info(f"Metrics and averages for {output_filename} saved successfully.")
+def process_and_save_data(file_path: str, output_dir: str, output_filename: str) -> None:
+    """
+    Loads data from a CSV file, processes it, appends averages, and saves the result to a new CSV file.
+
+    Args:
+    file_path (str): The path to the CSV file that contains the initial data.
+    output_dir (str): The directory where the processed CSV file will be saved.
+    output_filename (str): The name of the file to save the processed data to.
+
+    Returns: None
+    """
+    try:
+        data = pd.read_csv(file_path)
+        processed_data = process_data_frame(data)
+        final_data = append_averages_to_df(processed_data)
+        save_data_to_csv(final_data, output_dir, output_filename)
+        logger.info(f"Metrics and averages for {output_filename} saved successfully.")
+    except FileNotFoundError:
+        logger.error("The specified file was not found.")
+        raise
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+        raise
 
 
 if __name__ == "__main__":
