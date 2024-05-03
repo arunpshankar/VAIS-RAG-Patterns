@@ -37,21 +37,19 @@ def calculate_metrics(ranked_docs: List[str], expected_doc: str) -> Tuple[float,
         if expected_doc_normalized in ranked_docs_normalized:
             rank = ranked_docs_normalized.index(expected_doc_normalized) + 1
             p_at_1 = 1 if rank == 1 else 0
-            p_at_3 = 1 if rank <= 3 else 0
-            p_at_5 = 1 if rank <= 5 else 0
             mrr = 1 / rank
             ndcg_value = ndcg([1 if doc == expected_doc_normalized else 0 for doc in ranked_docs_normalized], 5)
             ap = average_precision([1 if doc == expected_doc_normalized else 0 for doc in ranked_docs_normalized])
         else:
-            p_at_1, p_at_3, p_at_5, mrr, ndcg_value, ap = 0, 0, 0, 0, 0, 0
+            p_at_1, mrr, ndcg_value, ap = 0, 0, 0, 0
 
-        return p_at_1, p_at_3, p_at_5, mrr, ndcg_value, ap
+        return p_at_1, mrr, ndcg_value, ap
     except Exception as e:
         logger.error(f"Error calculating metrics: {e}", exc_info=True)
-        return 0, 0, 0, 0, 0, 0
+        return 0, 0, 0, 0
 
 
-def calculate_recall_at_k(ranked_docs: List[str], expected_doc: str, k: int = 5) -> float:
+def calculate_recall_at_k(ranked_docs: List[str], expected_doc: str, k: int = 1) -> float:
     """
     Calculate recall at position k for a list of documents.
 
@@ -110,7 +108,7 @@ def process_data_frame(data: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame: The DataFrame with added columns for the various metrics and recall.
     """
     try:
-        data[['P@1', 'P@3', 'P@5', 'MRR', 'NDCG', 'AP', 'Recall@5']] = data.apply(
+        data[['P@1', 'MRR', 'NDCG', 'AP', 'Recall@1']] = data.apply(
             lambda row: list(calculate_metrics(eval(row['matched_documents']), row['expected_document'])) +
                         [calculate_recall_at_k(eval(row['matched_documents']), row['expected_document'])],
             axis=1, result_type='expand'
@@ -174,7 +172,7 @@ def append_averages_to_df(data: pd.DataFrame) -> pd.DataFrame:
     """
     try:
         map_value = mean_average_precision(data)
-        averages = data[['P@1', 'P@3', 'P@5', 'MRR', 'NDCG', 'Recall@5']].mean()
+        averages = data[['P@1', 'MRR', 'NDCG', 'Recall@1']].mean()
         averages['AP'] = map_value
         averages_df = pd.DataFrame([averages], index=['Averages'])
         return pd.concat([data, averages_df])
