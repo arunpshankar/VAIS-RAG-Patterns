@@ -19,7 +19,7 @@ def get_summarized_answer(query: str, data_store_id: str) -> str:
     return summarized_answer
 
 if __name__ == "__main__":
-    query = "What was the operating income or loss (in billions) for Google Cloud for Q1 of 2021 compared to the previous year?"
+    query = "What was the diluted earnings per share (EPS) for Microsoft in Q2 2023, and how much did it increase from the previous year?"
     data_store_id = "quarterly-reports"
     
     summarized_ans = get_summarized_answer(query, data_store_id)
