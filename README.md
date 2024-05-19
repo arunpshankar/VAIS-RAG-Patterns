@@ -3,7 +3,7 @@
 This repository offers a comprehensive toolkit for building and evaluating RAG pipelines specifically 
 designed for question answering on documents. Leveraging Vertex AI Search and Gemini Pro, it streamlines
  document processing, enhances search accuracy, and enables robust evaluation of retrieval and answer quality. 
- Explore the provided code and detailed Medium article [add link here] to learn how to create RAG pipelines
+ Explore the provided code and detailed [[Medium article](https://medium.com/google-cloud/architectural-blueprints-for-rag-automation-advanced-document-understanding-using-vertex-ai-search-537ee9376847)] to learn how to create RAG pipelines
   that deliver accurate and reliable responses to your inquiries.
 
 
